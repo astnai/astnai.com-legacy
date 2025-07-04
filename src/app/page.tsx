@@ -60,7 +60,7 @@ const NavLink = ({ title, url, description }: NavItem) => (
       aria-label={`${title} - ${description}`}
     >
       <span>{title}</span>
-      <ArrowTopRightIcon className="ml-0.5" aria-hidden="true" />
+      <ArrowTopRightIcon className="ml-1" aria-hidden="true" />
     </Link>
   </li>
 );

@@ -46,7 +46,6 @@ alwaysApply:
 
 - The project primarily uses React's built-in state management (e.g., `useState`, `useEffect`) within components.
 - Custom hooks (e.g., `useIsMobile`) are used for shared logic and responsive behavior.
-- There is no evidence of external state management libraries (such as Redux, Zustand, or Recoil); state is managed locally within components or via hooks.
 
 ### Component Organization
 

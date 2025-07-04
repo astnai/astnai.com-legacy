@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Caveat } from "next/font/google";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { Analytics } from "@vercel/analytics/next";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/header/Header";
 import "./globals.css";
 
@@ -23,14 +23,14 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://astnai.com"),
-  description: "astnai is the handle of Agustín Arias, a developer from Patagonia, Argentina.",
+  description:
+    "astnai is the handle of Agustín Arias, a developer from Patagonia, Argentina.",
   title: {
     template: "astnai/%s",
     default: "astnai",
   },
   openGraph: {
     siteName: "astnai",
-    url: "https://astnai.com",
     locale: "en_US",
     type: "website",
   },
@@ -56,7 +56,7 @@ export default function RootLayout({
           <main>
             {children}
             <Analytics />
-            <SpeedInsights/>
+            <SpeedInsights />
           </main>
         </ViewTransition>
       </body>
