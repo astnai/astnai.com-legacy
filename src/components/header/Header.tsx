@@ -10,7 +10,7 @@ const Header = () => {
           href="https://agustinarias.com"
           target="_self"
           rel="noopener noreferrer"
-          className="hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline decoration-2 underline-offset-2 decoration-neutral-300 dark:decoration-neutral-700 flex items-center"
+          className="text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline decoration-2 underline-offset-2 decoration-neutral-300 dark:decoration-neutral-700 flex items-center"
           aria-label="Visit the personal website of Agustin Arias (opens in new tab)"
         >
           <span className="flex items-center gap-1">
