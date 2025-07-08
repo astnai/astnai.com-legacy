@@ -2,13 +2,10 @@ import Link from "next/link";
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
 
-
-
 export const metadata: Metadata = {
   title: "links",
   description: "Social links and profiles of Agustín Arias",
 };
-
 
 interface SocialLink {
   title: string;
@@ -41,7 +38,7 @@ const LinkCard = ({ linkItem }: { linkItem: SocialLink }) => {
     <article className="group">
       <Link
         href={linkItem.url}
-        className="flex items-center gap-1 text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline hover:underline-offset-2 decoration-2 decoration-neutral-300 dark:decoration-neutral-700"
+        className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline hover:underline-offset-2 decoration-2 decoration-neutral-300 dark:decoration-neutral-700"
         target={isExternalLink ? "_blank" : undefined}
         rel={isExternalLink ? "noopener noreferrer" : undefined}
         aria-label={linkItem.description}

@@ -4,7 +4,8 @@ import { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "astnai",
-  description: "astnai is the handle of Agustín Arias, a developer from Patagonia, Argentina.",
+  description:
+    "astnai is the handle of Agustín Arias, a developer from Patagonia, Argentina.",
 };
 interface NavItem {
   title: string;
@@ -56,7 +57,7 @@ const NavLink = ({ title, url, description }: NavItem) => (
   <li>
     <Link
       href={url}
-      className="text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 inline-flex items-center hover:underline hover:underline-offset-2 decoration-2 decoration-neutral-300 dark:decoration-neutral-700"
+      className="text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 inline-flex items-center hover:underline hover:underline-offset-2 decoration-2 decoration-neutral-300 dark:decoration-neutral-700"
       aria-label={`${title} - ${description}`}
     >
       <span>{title}</span>

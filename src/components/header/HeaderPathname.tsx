@@ -15,7 +15,9 @@ const HeaderLink = () => {
       aria-label="Go to homepage"
       tabIndex={0}
     >
-      <h1 className="group-hover:text-neutral-500">astnai</h1>
+      <h1 className="text-neutral-800 dark:text-neutral-200 group-hover:text-neutral-500">
+        astnai
+      </h1>
       {!isHome && (
         <ViewTransition name="pathname">
           <span className=" " aria-label={`Current page: ${pathname.slice(1)}`}>

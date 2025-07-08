@@ -1,10 +1,15 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat } from "next/font/google";
+import { Geist, Geist_Mono, Caveat, Lora } from "next/font/google";
 import { unstable_ViewTransition as ViewTransition } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/header/Header";
 import "./globals.css";
+
+const lora  = Lora({
+  variable: "--font-lora",
+  subsets: ["latin"],
+});
 
 const caveat = Caveat({
   variable: "--font-handwriting",
@@ -49,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden touch-manipulation">
       <body
-        className={`${geistSans.className} ${geistMono.variable} ${caveat.variable} mx-auto max-w-screen-sm px-6 sm:px-8 md:px-10 text-sm sm:text-[15px] md:text-base leading-relaxed antialiased`}
+        className={`${geistSans.className} ${geistMono.variable} ${caveat.variable} ${lora.variable} mx-auto max-w-screen-sm px-6 sm:px-8 md:px-10 text-sm sm:text-[15px] md:text-base leading-relaxed antialiased`}
       >
         <Header />
         <ViewTransition name="layout">

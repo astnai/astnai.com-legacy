@@ -43,7 +43,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
           ─ {project.status}
         </span>
       </div>
-      <p className="mt-0.5 text-balance sm:max-w-[40ch] text-neutral-500">
+      <p className="mt-0.5 text-balance sm:max-w-[40ch] text-neutral-500 dark:text-neutral-400">
         {project.description}
       </p>
     </article>
@@ -63,7 +63,7 @@ export default function ProjectsPage() {
       <div className="flex justify-end mt-12">
         <a
           href="https://github.com/astnai"
-          className="flex items-center gap-0.5 text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 underline underline-offset-2 decoration-2 decoration-neutral-200 hover:decoration-neutral-300 dark:decoration-neutral-800 dark:hover:decoration-neutral-700"
+          className="flex items-center gap-0.5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 underline underline-offset-2 decoration-2 decoration-neutral-200 hover:decoration-neutral-300 dark:decoration-neutral-800 dark:hover:decoration-neutral-700"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="View more projects on GitHub"

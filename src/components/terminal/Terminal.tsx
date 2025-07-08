@@ -14,10 +14,35 @@ type HistoryItem = {
 
 // ===== Constants =====
 const AVAILABLE_COMMANDS = [
-  "ls", "cd", "pwd", "cat", "viu", "rename", "clear", "echo", "date", "whoami", "cowsay", "copy", "help", "open", "tree",
+  "ls",
+  "cd",
+  "pwd",
+  "cat",
+  "viu",
+  "rename",
+  "clear",
+  "echo",
+  "date",
+  "whoami",
+  "cowsay",
+  "copy",
+  "help",
+  "open",
+  "tree",
 ];
 const OPENABLE_PAGES_LIST = [
-  "polaroids", "/polaroids", "projects", "/projects", "books", "/books", "talks", "/talks", "links", "/links", "terminal", "/terminal",
+  "polaroids",
+  "/polaroids",
+  "projects",
+  "/projects",
+  "books",
+  "/books",
+  "talks",
+  "/talks",
+  "links",
+  "/links",
+  "terminal",
+  "/terminal",
 ];
 const OPENABLE_PAGES: { [key: string]: string } = {
   polaroids: "/polaroids",
@@ -76,7 +101,9 @@ const renderTree = (
   const entries = Object.entries((node as Directory).children);
   return (
     <div key={prefix + name} className="whitespace-pre">
-      {prefix + (name ? (isLast ? "└── " : "├── ") : "") + (name ? name + "/" : "")}
+      {prefix +
+        (name ? (isLast ? "└── " : "├── ") : "") +
+        (name ? name + "/" : "")}
       {entries.map(([childName, childNode], idx) =>
         renderTree(
           childNode,
@@ -96,7 +123,11 @@ export default function Terminal() {
   const [history, setHistory] = useState<HistoryItem[]>([
     { command: "", output: `░█▀█░█▀█\n░█▀█░█▀█\n░▀░▀░▀░▀`, prompt: "" },
     { command: "", output: "Welcome to astnai terminal", prompt: "" },
-    { command: "", output: "Type 'help' to see available commands", prompt: "" },
+    {
+      command: "",
+      output: "Type 'help' to see available commands",
+      prompt: "",
+    },
   ]);
   const [currentPath, setCurrentPath] = useState("/");
   const [username, setUsername] = useState("user@computer");
@@ -121,7 +152,11 @@ export default function Terminal() {
     const pathParts = currentPath.split("/").filter(Boolean);
     let current = fileSystem["/"] as Directory;
     for (const part of pathParts) {
-      if (current.type === "directory" && current.children && current.children[part]) {
+      if (
+        current.type === "directory" &&
+        current.children &&
+        current.children[part]
+      ) {
         current = current.children[part] as Directory;
       } else {
         return null;
@@ -135,7 +170,11 @@ export default function Terminal() {
       const pathParts = path.split("/").filter(Boolean);
       let current = fileSystem["/"] as Directory;
       for (const part of pathParts) {
-        if (current.type === "directory" && current.children && current.children[part]) {
+        if (
+          current.type === "directory" &&
+          current.children &&
+          current.children[part]
+        ) {
           current = current.children[part] as Directory;
         } else {
           return null;
@@ -144,7 +183,11 @@ export default function Terminal() {
       return current;
     }
     const currentDir = getCurrentDirectory();
-    if (!currentDir || currentDir.type !== "directory" || !currentDir.children) {
+    if (
+      !currentDir ||
+      currentDir.type !== "directory" ||
+      !currentDir.children
+    ) {
       return null;
     }
     return currentDir.children[path] || null;
@@ -154,8 +197,12 @@ export default function Terminal() {
   const getDisplayPath = () => (currentPath === "/" ? "/" : currentPath);
   const getCurrentPrompt = () => `${username}:${getDisplayPath()}$`;
   const formatMinutesSeconds = (seconds: number) => {
-    const m = Math.floor(seconds / 60).toString().padStart(2, "0");
-    const s = Math.floor(seconds % 60).toString().padStart(2, "0");
+    const m = Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, "0");
+    const s = Math.floor(seconds % 60)
+      .toString()
+      .padStart(2, "0");
     return `${m}:${s}`;
   };
 
@@ -173,7 +220,9 @@ export default function Terminal() {
   const getAvailableItems = () => {
     const currentDir = getCurrentDirectory();
     if (currentDir && currentDir.type === "directory" && currentDir.children) {
-      return Object.keys(currentDir.children).sort((a, b) => a.localeCompare(b));
+      return Object.keys(currentDir.children).sort((a, b) =>
+        a.localeCompare(b)
+      );
     }
     return [];
   };
@@ -184,9 +233,13 @@ export default function Terminal() {
     const lastArg = parts[parts.length - 1] || "";
 
     // --- NUEVO: Sugerencias especiales para play/viu en videos/photos ---
-    const isPlayInVideos = command === "play" && currentPath === "/media/videos";
+    const isPlayInVideos =
+      command === "play" && currentPath === "/media/videos";
     const isViuInPhotos = command === "viu" && currentPath === "/media/photos";
-    if ((isPlayInVideos || isViuInPhotos) && (parts.length === 1 || (parts.length === 2 && lastArg === ""))) {
+    if (
+      (isPlayInVideos || isViuInPhotos) &&
+      (parts.length === 1 || (parts.length === 2 && lastArg === ""))
+    ) {
       // Mostrar todos los archivos disponibles como ls (en grid)
       const availableItems = getAvailableItems();
       setHistory((prev) => [
@@ -205,10 +258,16 @@ export default function Terminal() {
       ]);
       return;
     }
-    if ((isPlayInVideos || isViuInPhotos) && parts.length === 2 && lastArg !== "") {
+    if (
+      (isPlayInVideos || isViuInPhotos) &&
+      parts.length === 2 &&
+      lastArg !== ""
+    ) {
       // Filtrar archivos disponibles como ls (en grid)
       const availableItems = getAvailableItems();
-      const matches = availableItems.filter((item) => item.toLowerCase().startsWith(lastArg.toLowerCase()));
+      const matches = availableItems.filter((item) =>
+        item.toLowerCase().startsWith(lastArg.toLowerCase())
+      );
       if (matches.length === 1) {
         const newParts = [...parts];
         newParts[newParts.length - 1] = matches[0];
@@ -251,19 +310,29 @@ export default function Terminal() {
     if (input.trim() === "") {
       setHistory((prev) => [
         ...prev,
-        { command: input, output: (<div className=" ">{AVAILABLE_COMMANDS.join("  ")}</div>), prompt: getCurrentPrompt() },
+        {
+          command: input,
+          output: <div className=" ">{AVAILABLE_COMMANDS.join("  ")}</div>,
+          prompt: getCurrentPrompt(),
+        },
       ]);
       return;
     }
     if (parts.length === 1) {
-      const matches = AVAILABLE_COMMANDS.filter((cmd) => cmd.startsWith(command));
+      const matches = AVAILABLE_COMMANDS.filter((cmd) =>
+        cmd.startsWith(command)
+      );
       if (matches.length === 1) {
         setInput(matches[0] + " ");
         return;
       } else if (matches.length > 1) {
         setHistory((prev) => [
           ...prev,
-          { command: input, output: (<div className=" ">{matches.join("  ")}</div>), prompt: getCurrentPrompt() },
+          {
+            command: input,
+            output: <div className=" ">{matches.join("  ")}</div>,
+            prompt: getCurrentPrompt(),
+          },
         ]);
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
@@ -283,13 +352,19 @@ export default function Terminal() {
       }
     }
     if (command === "open") {
-      const matches = OPENABLE_PAGES_LIST.filter((page) => page.toLowerCase().startsWith(lastArg.toLowerCase()));
+      const matches = OPENABLE_PAGES_LIST.filter((page) =>
+        page.toLowerCase().startsWith(lastArg.toLowerCase())
+      );
       if (matches.length === 1) {
         setInput(`open ${matches[0]}`);
       } else if (matches.length > 1) {
         setHistory((prev) => [
           ...prev,
-          { command: input, output: (<div className=" ">{matches.join("  ")}</div>), prompt: getCurrentPrompt() },
+          {
+            command: input,
+            output: <div className=" ">{matches.join("  ")}</div>,
+            prompt: getCurrentPrompt(),
+          },
         ]);
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
@@ -310,7 +385,11 @@ export default function Terminal() {
     }
     if (["cd", "cat", "viu", "play", "copy"].includes(command)) {
       const currentDir = getCurrentDirectory();
-      if (currentDir && currentDir.type === "directory" && currentDir.children) {
+      if (
+        currentDir &&
+        currentDir.type === "directory" &&
+        currentDir.children
+      ) {
         let items: string[] = [];
         if (command === "cd") {
           items = Object.entries(currentDir.children)
@@ -321,7 +400,9 @@ export default function Terminal() {
         } else {
           items = getSortedItems(currentDir);
         }
-        const matches = items.filter((item) => item.toLowerCase().startsWith(lastArg.toLowerCase()));
+        const matches = items.filter((item) =>
+          item.toLowerCase().startsWith(lastArg.toLowerCase())
+        );
         if (matches.length === 1) {
           const newParts = [...parts];
           newParts[newParts.length - 1] = matches[0];
@@ -329,7 +410,11 @@ export default function Terminal() {
         } else if (matches.length > 1) {
           setHistory((prev) => [
             ...prev,
-            { command: input, output: (<div className=" ">{matches.join("  ")}</div>), prompt: getCurrentPrompt() },
+            {
+              command: input,
+              output: <div className=" ">{matches.join("  ")}</div>,
+              prompt: getCurrentPrompt(),
+            },
           ]);
           const commonPrefix = matches.reduce((prefix, match) => {
             let common = "";
@@ -353,7 +438,9 @@ export default function Terminal() {
     }
     if (command === "ls") {
       const availableItems = getAvailableItems();
-      const matches = availableItems.filter((item) => item.toLowerCase().startsWith(lastArg.toLowerCase()));
+      const matches = availableItems.filter((item) =>
+        item.toLowerCase().startsWith(lastArg.toLowerCase())
+      );
       if (matches.length === 1) {
         const newParts = [...parts];
         newParts[newParts.length - 1] = matches[0];
@@ -361,7 +448,11 @@ export default function Terminal() {
       } else if (matches.length > 1) {
         setHistory((prev) => [
           ...prev,
-          { command: input, output: (<div className=" ">{matches.join("  ")}</div>), prompt: getCurrentPrompt() },
+          {
+            command: input,
+            output: <div className=" ">{matches.join("  ")}</div>,
+            prompt: getCurrentPrompt(),
+          },
         ]);
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
@@ -729,7 +820,7 @@ Path: ${currentPath}`;
                 preload="auto"
               />
               <div className="mt-2 flex items-center justify-between text-xs sm:text-sm">
-                <span className="text-neutral-500">
+                <span className="text-neutral-500 dark:text-neutral-400">
                   Q[QUIT] K[VOLUME DOWN] L[VOLUME UP] P[PAUSE/PLAY]
                 </span>
               </div>
@@ -818,7 +909,9 @@ Path: ${currentPath}`;
         output =
           "Usage: open <page>. Available pages: polaroids, projects, books, talks, links, terminal";
       } else {
-        const pageArg = args[0].startsWith("/") ? args[0] : args[0].toLowerCase();
+        const pageArg = args[0].startsWith("/")
+          ? args[0]
+          : args[0].toLowerCase();
         const pagePath = OPENABLE_PAGES[pageArg];
         if (pagePath) {
           router.push(pagePath);
@@ -1068,15 +1161,17 @@ Path: ${currentPath}`;
             </div>
             {isVideoMode ? (
               <>
-                <div className="text-neutral-500 absolute left-1/2 -translate-x-1/2">
+                <div className="text-neutral-500 dark:text-neutral-400 absolute left-1/2 -translate-x-1/2">
                   Video mode
                 </div>
                 <span className="text-xs sm:text-sm tabular-nums">
-                  {`${formatMinutesSeconds(videoCurrentTime)} / ${formatMinutesSeconds(videoDuration)}`}
+                  {`${formatMinutesSeconds(
+                    videoCurrentTime
+                  )} / ${formatMinutesSeconds(videoDuration)}`}
                 </span>
               </>
             ) : (
-              <div className="text-neutral-500 absolute left-1/2 -translate-x-1/2">
+              <div className="text-neutral-500 dark:text-neutral-400 absolute left-1/2 -translate-x-1/2">
                 Terminal
               </div>
             )}
@@ -1090,7 +1185,9 @@ Path: ${currentPath}`;
               <div key={index} className="mb-2">
                 {item.command !== "" && (
                   <div className="flex">
-                    <span className="text-neutral-500 mr-2">{item.prompt}</span>
+                    <span className="text-neutral-500 dark:text-neutral-400 mr-2">
+                      {item.prompt}
+                    </span>
                     <span className="">{item.command}</span>
                   </div>
                 )}
@@ -1103,7 +1200,7 @@ Path: ${currentPath}`;
             ))}
             {/* Current input line */}
             <form onSubmit={handleSubmit} className="flex">
-              <span className="text-neutral-500 mr-2">
+              <span className="text-neutral-500 dark:text-neutral-400 mr-2">
                 {getCurrentPrompt()}
               </span>
               <div className="flex-1 relative">
@@ -1121,7 +1218,7 @@ Path: ${currentPath}`;
           </div>
         </div>
         <div>
-          <p className="text-[11px] text-neutral-500 mt-4 text-center sm:hidden">
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-4 text-center sm:hidden">
             Desktop version recommended for a better experience.
           </p>
         </div>

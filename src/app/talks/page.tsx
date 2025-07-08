@@ -27,10 +27,10 @@ export default function TalksPage() {
         >
           <div>
             <header className="mb-4 border-b border-neutral-200 dark:border-neutral-800">
-              <h2 className="font-medium tracking-tight">{talk.title}</h2>
+              <h2 className="font-medium">{talk.title}</h2>
               <time
                 dateTime={talk.date}
-                className="mb-4 flex justify-between text-xs sm:text-sm text-neutral-500"
+                className="mb-4 flex justify-between text-xs sm:text-sm text-neutral-500 dark:text-neutral-400"
               >
                 {talk.date}
               </time>
