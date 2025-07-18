@@ -6,7 +6,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/header/Header";
 import "./globals.css";
 
-const lora  = Lora({
+const lora = Lora({
   variable: "--font-lora",
   subsets: ["latin"],
 });
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-x-hidden touch-manipulation">
       <body
-        className={`${geistSans.className} ${geistMono.variable} ${caveat.variable} ${lora.variable} mx-auto max-w-screen-sm px-6 sm:px-8 md:px-10 text-sm sm:text-[15px] md:text-base leading-relaxed antialiased`}
+        className={`${geistSans.className} ${geistMono.variable} ${caveat.variable} ${lora.variable} mx-auto w-full max-w-screen-sm px-6 sm:px-8 md:px-10 text-sm sm:text-[15px] md:text-base leading-relaxed antialiase`}
       >
         <Header />
         <ViewTransition name="layout">

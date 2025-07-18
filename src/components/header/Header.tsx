@@ -1,5 +1,5 @@
 import HeaderLink from "./HeaderPathname";
-import { ExternalLinkIcon } from "@radix-ui/react-icons";
+import ExternalIcon from "@/components/icons/external-icon";
 
 const Header = () => {
   return (
@@ -15,7 +15,7 @@ const Header = () => {
         >
           <span className="flex items-center gap-1">
             agustinarias.com
-            <ExternalLinkIcon className="w-4 h-4" />
+            <ExternalIcon className="w-4 h-4 align-middle" />
           </span>
         </a>
       </div>

@@ -11,12 +11,12 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-lora: var(--font-lora);
-  --font-handwriting: var(--font-handwriting)
+  --font-handwriting: var(--font-handwriting);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
+    --background: #171717;
     --foreground: #e5e5e5;
   }
 }
@@ -35,24 +35,13 @@
   }
 }
 
-* {
-  min-width: 0;
-  scrollbar-width: thin;
-  scrollbar-color: #e5e5e5 transparent;
-}
-
-@media (prefers-color-scheme: dark) {
-  * {
-    scrollbar-color: #262626 transparent;
-  }
-   }
-
 html {
   overflow-y: scroll;
   scroll-behavior: smooth;
 }
 
 body {
+  text-rendering: optimizeLegibility;
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
@@ -64,24 +53,25 @@ main {
   hyphenate-limit-chars: 10 5 5;
 }
 
+/* view transition */
 @supports (view-transition-name: none) {
   @media not (prefers-reduced-motion: reduce) {
     ::view-transition-old(layout) {
-      animation: hide 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+      animation: hide 0.4s cubic-bezier(0.6, 0, 0.8, 1) forwards;
     }
 
     ::view-transition-new(layout) {
       opacity: 0;
-      animation: appear 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+      animation: appear 0.6s ease 0.2s forwards;
     }
 
     ::view-transition-old(pathname) {
-      animation: hide 0.25s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+      animation: hide 0.4s cubic-bezier(0.6, 0, 0.8, 1) forwards;
     }
 
     ::view-transition-new(pathname) {
       opacity: 0;
-      animation: appear 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s forwards;
+      animation: appear 0.6s ease 0.2s forwards;
     }
   }
 }
@@ -89,7 +79,7 @@ main {
 @keyframes hide {
   0% {
     opacity: 1;
-    filter: blur(0px);
+    filter: blur(0);
   }
   100% {
     opacity: 0;
@@ -104,6 +94,6 @@ main {
   }
   100% {
     opacity: 1;
-    filter: blur(0px);
+    filter: blur(0);
   }
 }
