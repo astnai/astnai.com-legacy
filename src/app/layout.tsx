@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Caveat, Lora } from "next/font/google";
-import { unstable_ViewTransition as ViewTransition } from "react";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Header from "@/components/header/Header";
@@ -57,13 +56,11 @@ export default function RootLayout({
         className={`${geistSans.className} ${geistMono.variable} ${caveat.variable} ${lora.variable} mx-auto w-full max-w-screen-sm px-6 sm:px-8 md:px-10 text-sm sm:text-[15px] md:text-base leading-relaxed antialiase`}
       >
         <Header />
-        <ViewTransition name="layout">
-          <main>
-            {children}
-            <Analytics />
-            <SpeedInsights />
-          </main>
-        </ViewTransition>
+        <main>
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </main>
       </body>
     </html>
   );

@@ -33,12 +33,11 @@ const socialLinks: SocialLink[] = [
 
 const LinkCard = ({ linkItem }: { linkItem: SocialLink }) => {
   const isExternalLink = !linkItem.url.startsWith("mailto:");
-
   return (
-    <article className="group">
+    <div className="group">
       <Link
         href={linkItem.url}
-        className="flex items-center gap-1 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 hover:underline hover:underline-offset-2 decoration-2 decoration-neutral-300 dark:decoration-neutral-700"
+        className="flex items-center gap-1 text-muted-foreground main-hover"
         target={isExternalLink ? "_blank" : undefined}
         rel={isExternalLink ? "noopener noreferrer" : undefined}
         aria-label={linkItem.description}
@@ -46,7 +45,7 @@ const LinkCard = ({ linkItem }: { linkItem: SocialLink }) => {
         {linkItem.title}
         <ExternalLinkIcon className="w-4 h-4" aria-hidden="true" />
       </Link>
-    </article>
+    </div>
   );
 };
 

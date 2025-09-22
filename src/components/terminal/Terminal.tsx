@@ -19,6 +19,7 @@ const AVAILABLE_COMMANDS = [
   "pwd",
   "cat",
   "viu",
+  "play",
   "rename",
   "clear",
   "echo",
@@ -29,6 +30,22 @@ const AVAILABLE_COMMANDS = [
   "help",
   "open",
   "tree",
+];
+const MAX_HISTORY_ITEMS = 300;
+const DAY_ABBREVIATIONS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const MONTH_ABBREVIATIONS = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 const OPENABLE_PAGES_LIST = [
   "polaroids",
@@ -194,6 +211,14 @@ export default function Terminal() {
   };
 
   // ===== Terminal Utilities =====
+  const addHistory = (item: HistoryItem) => {
+    setHistory((prev) => {
+      const next = [...prev, item];
+      return next.length > MAX_HISTORY_ITEMS
+        ? next.slice(next.length - MAX_HISTORY_ITEMS)
+        : next;
+    });
+  };
   const getDisplayPath = () => (currentPath === "/" ? "/" : currentPath);
   const getCurrentPrompt = () => `${username}:${getDisplayPath()}$`;
   const formatMinutesSeconds = (seconds: number) => {
@@ -204,6 +229,53 @@ export default function Terminal() {
       .toString()
       .padStart(2, "0");
     return `${m}:${s}`;
+  };
+
+  const handleVideoKeyControls = (key: string) => {
+    if (!isVideoMode) return;
+    const upperKey = key.toUpperCase();
+    switch (upperKey) {
+      case "L":
+        if (videoRef.current) {
+          videoRef.current.volume = Math.min(1, videoRef.current.volume + 0.1);
+        }
+        break;
+      case "K":
+        if (videoRef.current) {
+          videoRef.current.volume = Math.max(0, videoRef.current.volume - 0.1);
+        }
+        break;
+      case "P":
+        if (videoRef.current && !isHandlingVideoControl) {
+          setIsHandlingVideoControl(true);
+          videoRef.current.focus();
+          if (videoRef.current.paused) {
+            setTimeout(() => {
+              videoRef.current?.play().catch((error) => {
+                console.error("Error playing video:", error);
+              });
+              setIsHandlingVideoControl(false);
+            }, 0);
+          } else {
+            setTimeout(() => {
+              videoRef.current?.pause();
+              setIsHandlingVideoControl(false);
+            }, 0);
+          }
+        }
+        break;
+      case "Q":
+        if (videoRef.current) {
+          videoRef.current.pause();
+          videoRef.current.currentTime = 0;
+          setIsVideoMode(false);
+          setInput("");
+          setHistory((prev) => prev.slice(0, -1));
+          setVideoCurrentTime(0);
+          setVideoDuration(0);
+        }
+        break;
+    }
   };
 
   // ===== Media Handlers =====
@@ -242,20 +314,17 @@ export default function Terminal() {
     ) {
       // Mostrar todos los archivos disponibles como ls (en grid)
       const availableItems = getAvailableItems();
-      setHistory((prev) => [
-        ...prev,
-        {
-          command: input,
-          output: (
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
-              {availableItems.map((name) => (
-                <div key={name}>{name}</div>
-              ))}
-            </div>
-          ),
-          prompt: getCurrentPrompt(),
-        },
-      ]);
+      addHistory({
+        command: input,
+        output: (
+          <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
+            {availableItems.map((name) => (
+              <div key={name}>{name}</div>
+            ))}
+          </div>
+        ),
+        prompt: getCurrentPrompt(),
+      });
       return;
     }
     if (
@@ -273,20 +342,17 @@ export default function Terminal() {
         newParts[newParts.length - 1] = matches[0];
         setInput(newParts.join(" "));
       } else if (matches.length > 1) {
-        setHistory((prev) => [
-          ...prev,
-          {
-            command: input,
-            output: (
-              <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
-                {matches.map((name) => (
-                  <div key={name}>{name}</div>
-                ))}
-              </div>
-            ),
-            prompt: getCurrentPrompt(),
-          },
-        ]);
+        addHistory({
+          command: input,
+          output: (
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
+              {matches.map((name) => (
+                <div key={name}>{name}</div>
+              ))}
+            </div>
+          ),
+          prompt: getCurrentPrompt(),
+        });
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
@@ -308,14 +374,11 @@ export default function Terminal() {
     }
 
     if (input.trim() === "") {
-      setHistory((prev) => [
-        ...prev,
-        {
-          command: input,
-          output: <div className=" ">{AVAILABLE_COMMANDS.join("  ")}</div>,
-          prompt: getCurrentPrompt(),
-        },
-      ]);
+      addHistory({
+        command: input,
+        output: <div className=" ">{AVAILABLE_COMMANDS.join("  ")}</div>,
+        prompt: getCurrentPrompt(),
+      });
       return;
     }
     if (parts.length === 1) {
@@ -326,14 +389,11 @@ export default function Terminal() {
         setInput(matches[0] + " ");
         return;
       } else if (matches.length > 1) {
-        setHistory((prev) => [
-          ...prev,
-          {
-            command: input,
-            output: <div className=" ">{matches.join("  ")}</div>,
-            prompt: getCurrentPrompt(),
-          },
-        ]);
+        addHistory({
+          command: input,
+          output: <div className=" ">{matches.join("  ")}</div>,
+          prompt: getCurrentPrompt(),
+        });
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
@@ -358,14 +418,11 @@ export default function Terminal() {
       if (matches.length === 1) {
         setInput(`open ${matches[0]}`);
       } else if (matches.length > 1) {
-        setHistory((prev) => [
-          ...prev,
-          {
-            command: input,
-            output: <div className=" ">{matches.join("  ")}</div>,
-            prompt: getCurrentPrompt(),
-          },
-        ]);
+        addHistory({
+          command: input,
+          output: <div className=" ">{matches.join("  ")}</div>,
+          prompt: getCurrentPrompt(),
+        });
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
@@ -408,14 +465,11 @@ export default function Terminal() {
           newParts[newParts.length - 1] = matches[0];
           setInput(newParts.join(" "));
         } else if (matches.length > 1) {
-          setHistory((prev) => [
-            ...prev,
-            {
-              command: input,
-              output: <div className=" ">{matches.join("  ")}</div>,
-              prompt: getCurrentPrompt(),
-            },
-          ]);
+          addHistory({
+            command: input,
+            output: <div className=" ">{matches.join("  ")}</div>,
+            prompt: getCurrentPrompt(),
+          });
           const commonPrefix = matches.reduce((prefix, match) => {
             let common = "";
             for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
@@ -446,14 +500,11 @@ export default function Terminal() {
         newParts[newParts.length - 1] = matches[0];
         setInput(newParts.join(" "));
       } else if (matches.length > 1) {
-        setHistory((prev) => [
-          ...prev,
-          {
-            command: input,
-            output: <div className=" ">{matches.join("  ")}</div>,
-            prompt: getCurrentPrompt(),
-          },
-        ]);
+        addHistory({
+          command: input,
+          output: <div className=" ">{matches.join("  ")}</div>,
+          prompt: getCurrentPrompt(),
+        });
         const commonPrefix = matches.reduce((prefix, match) => {
           let common = "";
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
@@ -505,6 +556,7 @@ open         - Open a page (navigate)
 pwd          - Show current directory
 rename       - Change username
 tree         - Show file system tree
+play         - Play videos
 viu          - View images
 whoami       - Show username
 cowsay       - Make a cow say something
@@ -532,6 +584,10 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
           case "viu":
             output =
               "viu - View image files\nUsage: viu [image-file]\nDisplays the actual image directly in the terminal.";
+            break;
+          case "play":
+            output =
+              "play - Play video files\nUsage: play [video-file]\nPlays MP4 videos with keyboard controls: Q (quit), K (volume down), L (volume up), P (pause/play).";
             break;
           case "rename":
             output =
@@ -637,23 +693,8 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
       output = processedOutput;
     } else if (command === "date") {
       const now = new Date();
-      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      const months = [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ];
-      const day = days[now.getDay()];
-      const month = months[now.getMonth()];
+      const day = DAY_ABBREVIATIONS[now.getDay()];
+      const month = MONTH_ABBREVIATIONS[now.getMonth()];
       const date = now.getDate().toString().padStart(2, "0");
       const hours = now.getHours().toString().padStart(2, "0");
       const minutes = now.getMinutes().toString().padStart(2, "0");
@@ -820,7 +861,7 @@ Path: ${currentPath}`;
                 preload="auto"
               />
               <div className="mt-2 flex items-center justify-between text-xs sm:text-sm">
-                <span className="text-neutral-500 dark:text-neutral-400">
+                <span className="text-muted-foreground">
                   Q[QUIT] K[VOLUME DOWN] L[VOLUME UP] P[PAUSE/PLAY]
                 </span>
               </div>
@@ -933,10 +974,7 @@ Path: ${currentPath}`;
       output = `Command not found: ${command}`;
     }
 
-    setHistory((prev) => [
-      ...prev,
-      { command: cmd, output, prompt: currentPrompt },
-    ]);
+    addHistory({ command: cmd, output, prompt: currentPrompt });
     if (cmd.trim()) playOutputSound();
     setInput("");
   };
@@ -950,54 +988,7 @@ Path: ${currentPath}`;
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (isVideoMode) {
       e.preventDefault();
-      switch (e.key.toUpperCase()) {
-        case "L":
-          if (videoRef.current) {
-            videoRef.current.volume = Math.min(
-              1,
-              videoRef.current.volume + 0.1
-            );
-          }
-          break;
-        case "K":
-          if (videoRef.current) {
-            videoRef.current.volume = Math.max(
-              0,
-              videoRef.current.volume - 0.1
-            );
-          }
-          break;
-        case "P":
-          if (videoRef.current && !isHandlingVideoControl) {
-            setIsHandlingVideoControl(true);
-            videoRef.current.focus();
-            if (videoRef.current.paused) {
-              setTimeout(() => {
-                videoRef.current?.play().catch((error) => {
-                  console.error("Error playing video:", error);
-                });
-                setIsHandlingVideoControl(false);
-              }, 0);
-            } else {
-              setTimeout(() => {
-                videoRef.current?.pause();
-                setIsHandlingVideoControl(false);
-              }, 0);
-            }
-          }
-          break;
-        case "Q":
-          if (videoRef.current) {
-            videoRef.current.pause();
-            videoRef.current.currentTime = 0;
-            setIsVideoMode(false);
-            setInput("");
-            setHistory((prev) => prev.slice(0, -1));
-            setVideoCurrentTime(0);
-            setVideoDuration(0);
-          }
-          break;
-      }
+      handleVideoKeyControls(e.key);
       return;
     }
 
@@ -1063,54 +1054,10 @@ Path: ${currentPath}`;
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (isVideoMode && !isHandlingVideoControl) {
-        e.preventDefault();
-        switch (e.key.toUpperCase()) {
-          case "L":
-            if (videoRef.current) {
-              videoRef.current.volume = Math.min(
-                1,
-                videoRef.current.volume + 0.1
-              );
-            }
-            break;
-          case "K":
-            if (videoRef.current) {
-              videoRef.current.volume = Math.max(
-                0,
-                videoRef.current.volume - 0.1
-              );
-            }
-            break;
-          case "P":
-            if (videoRef.current && !isHandlingVideoControl) {
-              setIsHandlingVideoControl(true);
-              videoRef.current.focus();
-              if (videoRef.current.paused) {
-                setTimeout(() => {
-                  videoRef.current?.play().catch((error) => {
-                    console.error("Error playing video:", error);
-                  });
-                  setIsHandlingVideoControl(false);
-                }, 0);
-              } else {
-                setTimeout(() => {
-                  videoRef.current?.pause();
-                  setIsHandlingVideoControl(false);
-                }, 0);
-              }
-            }
-            break;
-          case "Q":
-            if (videoRef.current) {
-              videoRef.current.pause();
-              videoRef.current.currentTime = 0;
-              setIsVideoMode(false);
-              setInput("");
-              setHistory((prev) => prev.slice(0, -1));
-              setVideoCurrentTime(0);
-              setVideoDuration(0);
-            }
-            break;
+        const key = e.key.toUpperCase();
+        if (key === "Q" || key === "K" || key === "L" || key === "P") {
+          e.preventDefault();
+          handleVideoKeyControls(e.key);
         }
       }
     };
@@ -1135,7 +1082,7 @@ Path: ${currentPath}`;
       video.removeEventListener("timeupdate", handleTimeUpdate);
       video.removeEventListener("loadedmetadata", handleLoadedMetadata);
     };
-  }, [isVideoMode, videoRef.current]);
+  }, [isVideoMode]);
 
   useEffect(() => {
     const savedUsername = localStorage.getItem("terminal_username");
@@ -1161,7 +1108,7 @@ Path: ${currentPath}`;
             </div>
             {isVideoMode ? (
               <>
-                <div className="text-neutral-500 dark:text-neutral-400 absolute left-1/2 -translate-x-1/2">
+                <div className="text-muted-foreground absolute left-1/2 -translate-x-1/2">
                   Video mode
                 </div>
                 <span className="text-xs sm:text-sm tabular-nums">
@@ -1171,7 +1118,7 @@ Path: ${currentPath}`;
                 </span>
               </>
             ) : (
-              <div className="text-neutral-500 dark:text-neutral-400 absolute left-1/2 -translate-x-1/2">
+              <div className="text-muted-foreground absolute left-1/2 -translate-x-1/2">
                 Terminal
               </div>
             )}
@@ -1185,22 +1132,20 @@ Path: ${currentPath}`;
               <div key={index} className="mb-2">
                 {item.command !== "" && (
                   <div className="flex">
-                    <span className="text-neutral-500 dark:text-neutral-400 mr-2">
+                    <span className="text-muted-foreground mr-2">
                       {item.prompt}
                     </span>
                     <span className="">{item.command}</span>
                   </div>
                 )}
                 {item.output && (
-                  <div className="  ml-4 whitespace-pre-wrap">
-                    {item.output}
-                  </div>
+                  <div className="ml-4 whitespace-pre-wrap">{item.output}</div>
                 )}
               </div>
             ))}
             {/* Current input line */}
             <form onSubmit={handleSubmit} className="flex">
-              <span className="text-neutral-500 dark:text-neutral-400 mr-2">
+              <span className="text-muted-foreground mr-2">
                 {getCurrentPrompt()}
               </span>
               <div className="flex-1 relative">
@@ -1218,7 +1163,7 @@ Path: ${currentPath}`;
           </div>
         </div>
         <div>
-          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-4 text-center sm:hidden">
+          <p className="text-[11px] text-muted-foreground mt-4 text-center sm:hidden">
             Desktop version recommended for a better experience.
           </p>
         </div>
