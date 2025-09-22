@@ -1,13 +1,25 @@
 ## project structure
 
-- `/app` - next.js app router pages and layouts
-- `/app/api` - api routes (server endpoints)
-- `/components` - custom react components
-- `/public` - static assets (images, icons, etc)
-- `/types` - typescript type definitions
-- `/hooks` - custom react hooks
-- `/utils` - helper functions
-- `/lib` - utility functions and shared logic
+- `/src/app` - Next.js App Router pages and layouts
+  - `/books` - Books collection page
+  - `/links` - Social links and profiles page
+  - `/polaroids` - Photo gallery with polaroid-style layout
+  - `/projects` - Projects showcase page
+  - `/talks` - Technical presentations and talks page
+  - `/terminal` - Interactive terminal file system explorer
+- `/src/components` - Custom React components organized by feature
+  - `/books` - Book-related components
+  - `/polaroids` - Polaroid gallery components
+  - `/terminal` - Terminal interface components
+  - `/icons` - Custom icon components
+- `/src/data` - Static data and content management
+- `/src/hooks` - Custom React hooks
+- `/src/lib` - Utility functions and shared logic
+  - `/types` - TypeScript type definitions
+- `/public` - Static assets organized by content type
+  - `/polaroids` - Photo gallery images
+  - `/talks` - Talk presentation assets
+  - `/terminal` - Terminal interface assets
 
 ## tech stack
 
