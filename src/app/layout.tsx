@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Caveat, Lora } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import Header from "@/components/header/Header";
+import Header from "@/components/Header";
 import "./globals.css";
 
 const lora = Lora({

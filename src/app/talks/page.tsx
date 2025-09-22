@@ -1,5 +1,6 @@
 import Image from "next/image";
 import type { Metadata } from "next";
+import { talks } from "@/data/talks";
 
 export const metadata: Metadata = {
   title: "talks",
@@ -7,31 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function TalksPage() {
-  // DATA-TALKS
-  const talks = [
-    {
-      title: "AI and the web",
-      date: "September 15, 2024",
-      description:
-        "The new copy + paste. How Tailwind made styling more accessible and became a standard in code generation. AI in IDE (Cursor). The distinction between programming and coding. How AI facilitates coding, but not programming. For AI-assisted coding to be efficient, there must be an aligned workflow. AI is a means to amplify inputs.",
-      imageUrl: "/talks/ai-and-the-web.webp",
-    },
-    {
-      title: "AI and the web",
-      date: "September 15, 2024",
-      description:
-        "The new copy + paste. How Tailwind made styling more accessible and became a standard in code generation. AI in IDE (Cursor). The distinction between programming and coding. How AI facilitates coding, but not programming. For AI-assisted coding to be efficient, there must be an aligned workflow. AI is a means to amplify inputs.",
-      imageUrl: "/talks/ai-and-the-web.webp",
-    },
-    {
-      title: "AI and the web",
-      date: "September 15, 2024",
-      description:
-        "The new copy + paste. How Tailwind made styling more accessible and became a standard in code generation. AI in IDE (Cursor). The distinction between programming and coding. How AI facilitates coding, but not programming. For AI-assisted coding to be efficient, there must be an aligned workflow. AI is a means to amplify inputs.",
-      imageUrl: "/talks/ai-and-the-web.webp",
-    },
-  ];
-
   return (
     <section aria-label="List of talks" className="space-y-16">
       {talks.map((talk, index) => (

@@ -31,13 +31,11 @@ const Header = () => {
           href="https://agustinarias.com"
           target="_self"
           rel="noopener noreferrer"
-          className="text-muted-foreground dark:text-muted-foreground hover:text-primary flex items-center"
+          className="text-muted-foreground dark:text-muted-foreground hover:text-primary flex items-center gap-1"
           aria-label="Visit the personal website of Agustin Arias (opens in new tab)"
         >
-          <span className="flex items-center gap-1">
-            blog
-            <ExternalIcon className="w-4 h-4 align-middle" />
-          </span>
+          blog
+          <ExternalIcon className="w-4 h-4 align-middle" />
         </a>
       </div>
     </div>

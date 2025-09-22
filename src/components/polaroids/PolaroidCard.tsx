@@ -12,7 +12,6 @@ interface PolaroidCardProps {
 
 export const PolaroidCard = ({ polaroid, index }: PolaroidCardProps) => {
   const isMobile = useIsMobile();
-
   const initialRotation = ((index * 7) % 10) - 5;
 
   return (

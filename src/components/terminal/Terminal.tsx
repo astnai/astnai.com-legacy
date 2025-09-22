@@ -1096,14 +1096,14 @@ Path: ${currentPath}`;
     <div className="flex items-center justify-center leading-normal">
       <div className="w-full">
         <div
-          className="bg-neutral-100 dark:bg-neutral-900 shadow-xs dark:shadow-white/10 ring ring-neutral-800/10 dark:ring-neutral-200/10 rounded-xl h-[480px] md:h-[540px] lg:h-[600px] overflow-hidden flex flex-col text-xs sm:text-sm tracking-tight"
+          className="bg-card shadow-xs dark:shadow-white/10 border border-border rounded-xl h-[480px] md:h-[540px] lg:h-[600px] overflow-hidden flex flex-col text-xs sm:text-sm tracking-tight"
           onClick={() => !isMobile && inputRef.current?.focus()}
         >
           {/* Terminal header */}
-          <div className="h-12 px-4 border-b border-neutral-200 dark:border-neutral-800 flex items-center justify-between">
+          <div className="h-12 px-4 border-b border-border flex items-center justify-between">
             <div className="flex space-x-2">
               <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-400"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
               <div className="w-3 h-3 rounded-full bg-green-500"></div>
             </div>
             {isVideoMode ? (
@@ -1155,7 +1155,7 @@ Path: ${currentPath}`;
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="w-full bg-transparent outline-none font-mono  "
+                  className="w-full bg-transparent outline-none font-mono"
                   autoFocus
                 />
               </div>

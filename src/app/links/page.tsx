@@ -1,35 +1,13 @@
 import Link from "next/link";
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Metadata } from "next";
+import { socialLinks } from "@/data/links";
+import type { SocialLink } from "@/lib/types/link";
 
 export const metadata: Metadata = {
   title: "links",
   description: "Social links and profiles of Agustín Arias",
 };
-
-interface SocialLink {
-  title: string;
-  url: string;
-  description: string;
-}
-
-const socialLinks: SocialLink[] = [
-  // {
-  //   title: "astnai/instagram",
-  //   url: "https://instagram.astnai.com",
-  //   description: "Instagram profile of Agustin Arias",
-  // },
-  {
-    title: "astnai/twitter",
-    url: "https://twitter.com/astnai",
-    description: "Twitter profile of Agustin Arias",
-  },
-  {
-    title: "astnai/github",
-    url: "https://github.com/astnai",
-    description: "GitHub profile of Agustin Arias",
-  },
-];
 
 const LinkCard = ({ linkItem }: { linkItem: SocialLink }) => {
   const isExternalLink = !linkItem.url.startsWith("mailto:");
@@ -52,33 +30,20 @@ const LinkCard = ({ linkItem }: { linkItem: SocialLink }) => {
 const LinksPage = () => {
   return (
     <>
-      <section aria-labelledby="social-links-heading">
-        <h2 id="social-links-heading" className="sr-only">
-          Social Media Links
-        </h2>
+      <div>
         <div className="space-y-12">
           {socialLinks.map((linkItem) => (
             <LinkCard key={linkItem.title} linkItem={linkItem} />
           ))}
         </div>
-      </section>
+      </div>
 
-      <section aria-labelledby="social-note-heading" className="mt-12">
-        <h2 id="social-note-heading" className="sr-only">
-          Personal Note
-        </h2>
+      <div className="mt-12">
         <p className="text-balance">
-          <span className="text-blue-500" aria-hidden="true">
-            *
-          </span>
-          personally, i don&apos;t use social media much. i&apos;m only active
-          on{" "}
-          <span className="bg-neutral-200 dark:bg-neutral-800 py-0.5 px-1 md:py-1 rounded-md text-xs sm:text-sm">
-            twitter
-          </span>{" "}
-          — the <span className="italic">everything</span> app.
+          <span className="text-blue-500/60">*</span>
+          personally, i&apos;m not very active on social media, you&apos;ll only find me online on twitter, the <span className="italic">everything</span> app.
         </p>
-      </section>
+      </div>
     </>
   );
 };

@@ -1,26 +1,13 @@
 import { Metadata } from "next";
+import { projects } from "@/data/projects";
+import type { Project } from "@/lib/types/project";
+import ExternalIcon from "@/components/icons/external-icon";
+
 
 export const metadata: Metadata = {
   title: "projects",
   description: "A collection of Agustín Arias's projects.",
 };
-
-interface Project {
-  title: string;
-  url: string;
-  status: string;
-  description: string;
-}
-
-const projects: Project[] = [
-  {
-    title: "Buen Valley",
-    url: "https://x.com/buenvalley",
-    status: "soon",
-    description:
-      "Open-source community created to contribute to the startup ecosystem in Buenos Aires, AR.",
-  },
-];
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
@@ -28,7 +15,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
       <div className="flex items-center gap-1">
         <a
           href={project.url}
-          className="hover:text-neutral-800 dark:hover:text-neutral-200 underline underline-offset-2 decoration-2 decoration-neutral-200 hover:decoration-neutral-300 dark:decoration-neutral-800 dark:hover:decoration-neutral-700"
+          className="underline underline-offset-4 decoration-border hover:text-muted-foreground"
           target="_blank"
           rel="noopener noreferrer"
           tabIndex={0}
@@ -43,7 +30,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
           ─ {project.status}
         </span>
       </div>
-      <p className="mt-0.5 text-balance sm:max-w-[40ch] text-neutral-500 dark:text-neutral-400">
+      <p className="mt-0.5 text-balance sm:max-w-[40ch] text-muted-foreground">
         {project.description}
       </p>
     </article>
@@ -52,7 +39,7 @@ const ProjectCard = ({ project }: { project: Project }) => {
 
 export default function ProjectsPage() {
   return (
-    <div className="">
+    <div>
       <div className="space-y-8">
         <div className="space-y-8">
           {projects.map((project) => (
@@ -63,13 +50,16 @@ export default function ProjectsPage() {
       <div className="flex justify-end mt-12">
         <a
           href="https://github.com/astnai"
-          className="flex items-center gap-0.5 text-neutral-500 dark:text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200 underline underline-offset-2 decoration-2 decoration-neutral-200 hover:decoration-neutral-300 dark:decoration-neutral-800 dark:hover:decoration-neutral-700"
+          className="text-muted-foreground dark:text-muted-foreground hover:text-primary flex items-center gap-1"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="View more projects on GitHub"
         >
           more things on github
+          <ExternalIcon className="w-4 h-4 align-middle" />
+
         </a>
+        
       </div>
     </div>
   );
