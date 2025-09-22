@@ -32,8 +32,8 @@ export default function TalksPage() {
               src={talk.imageUrl}
               alt={`Presentation slide for ${talk.title}`}
               fill
-              priority={index < 2}
-              sizes="(max-width: 640px) 100vw, 50vw"
+              priority={index < 1}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 40vw"
               className="object-cover"
             />
           </figure>

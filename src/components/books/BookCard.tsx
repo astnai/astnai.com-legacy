@@ -3,9 +3,10 @@ import { Book } from "@/lib/types/book";
 
 interface BookCardProps {
   book: Book;
+  priority?: boolean;
 }
 
-export const BookCard = ({ book }: BookCardProps) => {
+export const BookCard = ({ book, priority = false }: BookCardProps) => {
   return (
     <div className="relative w-full aspect-[2/3]">
       <a
@@ -45,12 +46,13 @@ export const BookCard = ({ book }: BookCardProps) => {
           src={book.coverUrl}
           alt={`Book cover of ${book.name}`}
           fill
+          priority={priority}
           className="
             object-cover
             object-center
             scale-[1.04]
           "
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
       </a>
     </div>

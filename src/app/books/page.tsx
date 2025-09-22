@@ -9,9 +9,13 @@ export const metadata: Metadata = {
 
 export default function BooksPage() {
   return (
-    <div className="grid grid-cols-2 gap-6 sm:gap-12">
+    <div className="grid grid-cols-2 gap-6 sm:gap-12 mb-20">
       {favoriteBooks.map((book, index) => (
-        <BookCard key={`${book.name}-${index}`} book={book} />
+        <BookCard
+          key={`${book.name}-${index}`}
+          book={book}
+          priority={index < 4}
+        />
       ))}
     </div>
   );
