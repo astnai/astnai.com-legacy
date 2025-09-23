@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function BooksPage() {
   return (
-    <div className="grid grid-cols-2 gap-6 mb-20 [&:has(.book-card:hover)_.book-card]:opacity-20 [&:has(.book-card:hover)_.book-card:hover]:opacity-100">
+    <div className="grid grid-cols-2 gap-6 mb-20 md:[&:has(.book-card:hover)_.book-card]:opacity-20 md:[&:has(.book-card:hover)_.book-card:hover]:opacity-100">
       {favoriteBooks.map((book, index) => (
         <BookCard
           key={`${book.name}-${index}`}

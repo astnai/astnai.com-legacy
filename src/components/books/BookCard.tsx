@@ -13,7 +13,7 @@ export const BookCard = ({ book, priority = false }: BookCardProps) => {
         href={book.bookUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="relative block h-full overflow-hidden rounded-r-2xl rounded-l-sm shadow-xl ring ring-neutral-800/10 dark:ring-neutral-200/10 dark:shadow-white/10 cursor-pointer hover:shadow-none transition-shadow duration-200 ease-in-out"
+        className="relative block h-full overflow-hidden rounded-r-2xl rounded-l-sm shadow-xl ring ring-neutral-800/10 dark:ring-neutral-200/10 dark:shadow-white/10 cursor-pointer md:hover:shadow-none md:transition-shadow md:duration-200 md:ease-in-out"
         aria-label={`View details for ${book.name}`}
       >
         <Image
