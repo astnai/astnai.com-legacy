@@ -1,6 +1,6 @@
 export interface Talk {
   title: string;
   date: string;
-  description: string;
+  highlights: string[];
   imageUrl: string;
 }

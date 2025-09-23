@@ -25,7 +25,19 @@ export default function TalksPage() {
                 {talk.date}
               </time>
             </header>
-            <p>{talk.description}</p>
+            <ul className="list-disc pl-4 space-y-4 sm:space-y-6 md:space-8">
+              {talk.highlights
+                .slice()
+                .sort((a, b) => b.length - a.length)
+                .map((point, i) => (
+                  <li
+                    key={i}
+                    className="text-sm sm:text-base leading-relaxed marker:text-muted-foreground"
+                  >
+                    {point}
+                  </li>
+                ))}
+            </ul>
           </div>
           <figure className="relative aspect-[4/6] w-full overflow-hidden rounded-xs">
             <Image
