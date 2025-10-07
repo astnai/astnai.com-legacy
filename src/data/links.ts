@@ -1,4 +1,4 @@
-import { SocialLink } from "@/lib/types/link";
+import { SocialLink } from '@/lib/types/link';
 
 export const socialLinks: SocialLink[] = [
   // {
@@ -7,13 +7,13 @@ export const socialLinks: SocialLink[] = [
   //   description: "Instagram profile of Agustin Arias",
   // },
   {
-    title: "astnai/twitter",
-    url: "https://twitter.com/astnai",
-    description: "Twitter profile of Agustin Arias",
+    title: 'astnai/twitter',
+    url: 'https://twitter.com/astnai',
+    description: 'Twitter profile of Agustin Arias',
   },
   {
-    title: "astnai/github",
-    url: "https://github.com/astnai",
-    description: "GitHub profile of Agustin Arias",
+    title: 'astnai/github',
+    url: 'https://github.com/astnai',
+    description: 'GitHub profile of Agustin Arias',
   },
 ];

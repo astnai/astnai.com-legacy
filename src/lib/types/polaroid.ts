@@ -1,5 +1,5 @@
 export type Polaroid = {
-  src: string
-  alt: string
-  caption: string
-} 
+  src: string;
+  alt: string;
+  caption: string;
+};

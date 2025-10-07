@@ -1,15 +1,15 @@
 // File system types
-export type FileContent = string | "image" | "video";
+export type FileContent = string | 'image' | 'video';
 
 export interface File {
-  type: "file";
+  type: 'file';
   content: FileContent;
   imageUrl?: string;
   videoUrl?: string;
 }
 
 export interface Directory {
-  type: "directory";
+  type: 'directory';
   children: FileSystemNode;
 }
 
@@ -19,187 +19,202 @@ export type FileSystemNode = {
 
 // File system structure
 export const fileSystem: FileSystemNode = {
-  "/": {
-    type: "directory",
+  '/': {
+    type: 'directory',
     children: {
       about: {
-        type: "directory",
+        type: 'directory',
         children: {
-          "about-me.txt": {
-            type: "file",
-            content: "i'm a developer from patagonia, argentina. i was born in puerto madryn, chubut. i started freelancing websites at 15, finished high school, then moved to buenos aires where i grew my career through work, skipping university.\n\ni see myself as a generalist, and philosophically i relate more to existentialism than stoicism, though i respect the resilience of a stoic a lot",
+          'about-me.txt': {
+            type: 'file',
+            content:
+              "i'm a developer from patagonia, argentina. i was born in puerto madryn, chubut. i started freelancing websites at 15, finished high school, then moved to buenos aires where i grew my career through work, skipping university.\n\ni see myself as a generalist, and philosophically i relate more to existentialism than stoicism, though i respect the resilience of a stoic a lot",
           },
-          "why-astnai.txt": {
-            type: "file",
-            content: "astnai comes from a mix of my first and last name. i was looking for a global handle and an easier way for people to say my name since agustin doesn't sound great in english. after playing with a few combinations i came up with \"astnai\" and saw it was available on almost every social platform so i kept it.\n\nthe abbreviation preview would look like this:\n\n[a]gu[s][t]in [a]r[i]as",
+          'why-astnai.txt': {
+            type: 'file',
+            content:
+              'astnai comes from a mix of my first and last name. i was looking for a global handle and an easier way for people to say my name since agustin doesn\'t sound great in english. after playing with a few combinations i came up with "astnai" and saw it was available on almost every social platform so i kept it.\n\nthe abbreviation preview would look like this:\n\n[a]gu[s][t]in [a]r[i]as',
           },
-          "things-i-like": {
-            type: "directory",
+          'things-i-like': {
+            type: 'directory',
             children: {
-              "README.txt": {
-                type: "file",
-                content: "mainly computers, or anything that fits into general tech. computers are my gateway to entertainment. i really like listening to soundtracks, especially from games and anime.\n\nsince i was a kid i've been into silicon valley, the whole scene really. even the drama is kind of entertaining. i love tea and during the day i mix it up with mate—caffeine in the morning, mateine in the afternoon",
+              'README.txt': {
+                type: 'file',
+                content:
+                  "mainly computers, or anything that fits into general tech. computers are my gateway to entertainment. i really like listening to soundtracks, especially from games and anime.\n\nsince i was a kid i've been into silicon valley, the whole scene really. even the drama is kind of entertaining. i love tea and during the day i mix it up with mate—caffeine in the morning, mateine in the afternoon",
               },
-              "anime-top.txt": {
-                type: "file",
-                content: "i like anime, probably because of how curious i am about japan. the stories, the direction, and all the unique elements like music and animation really pulled me in\n\n- one piece, shingeki no kyojin, hxh\n- sonny boy, madoka magica, evangelion\n- kaguya-sama, nichijou, bocchi the rock\n- frieren, made in abyss, violet evergarden\n- all studio ghibli movies",
+              'anime-top.txt': {
+                type: 'file',
+                content:
+                  'i like anime, probably because of how curious i am about japan. the stories, the direction, and all the unique elements like music and animation really pulled me in\n\n- one piece, shingeki no kyojin, hxh\n- sonny boy, madoka magica, evangelion\n- kaguya-sama, nichijou, bocchi the rock\n- frieren, made in abyss, violet evergarden\n- all studio ghibli movies',
               },
-              "games-top.txt": {
-                type: "file",
-                content: "consoles and video games were a big part of my childhood. my first console was the nintendo ds and my favorite is the nintendo wii. i prefer chill games and avoid competitive stuff.\n\n- breath of the wild and tears of the kingdom\n- super mario galaxy\n- hollow knight\n- minecraft\n- celeste\n- league of legends (good product, bad game)",
+              'games-top.txt': {
+                type: 'file',
+                content:
+                  'consoles and video games were a big part of my childhood. my first console was the nintendo ds and my favorite is the nintendo wii. i prefer chill games and avoid competitive stuff.\n\n- breath of the wild and tears of the kingdom\n- super mario galaxy\n- hollow knight\n- minecraft\n- celeste\n- league of legends (good product, bad game)',
               },
-              "music-top.txt": {
-                type: "file",
-                content: "by preference, i like listening to music without lyrics—ambient stuff, soundtracks, orchestras. or if there are lyrics, i kinda enjoy not understanding them, so i listen to a lot of city pop (japanese music).\n\n- the legend of zelda: zelda's lullaby, gerudo valley, ocarina of time title theme, \n- breath of the wild and tears of the kingdom main theme\n- howl's moving castle, princess mononoke, violet evergarden, kimi no na wa\n- minecraft, super mario galaxy, outer wilds main theme",
+              'music-top.txt': {
+                type: 'file',
+                content:
+                  "by preference, i like listening to music without lyrics—ambient stuff, soundtracks, orchestras. or if there are lyrics, i kinda enjoy not understanding them, so i listen to a lot of city pop (japanese music).\n\n- the legend of zelda: zelda's lullaby, gerudo valley, ocarina of time title theme, \n- breath of the wild and tears of the kingdom main theme\n- howl's moving castle, princess mononoke, violet evergarden, kimi no na wa\n- minecraft, super mario galaxy, outer wilds main theme",
               },
             },
           },
         },
       },
       media: {
-        type: "directory",
+        type: 'directory',
         children: {
           photos: {
-            type: "directory",
+            type: 'directory',
             children: {
-
-              "steve-jobs.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/steve-jobs.webp",
+              'steve-jobs.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/steve-jobs.webp',
               },
-              "zelda-quote.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/zelda-quote.webp",
+              'zelda-quote.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/zelda-quote.webp',
               },
-              "argentina.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/argentina.webp",
+              'argentina.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/argentina.webp',
               },
-              "sama-tweet.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/sama-tweet.webp",
+              'sama-tweet.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/sama-tweet.webp',
               },
-              "puerto-madryn.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/puerto-madryn.webp",
+              'puerto-madryn.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/puerto-madryn.webp',
               },
-              "golden-gate.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/golden-gate.webp",
+              'golden-gate.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/golden-gate.webp',
               },
-              "marcos-galperin.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/marcos-galperin.webp",
+              'marcos-galperin.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/marcos-galperin.webp',
               },
-              "seneca-meme.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/seneca-meme.webp",
+              'seneca-meme.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/seneca-meme.webp',
               },
-              "luis-borges.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/luis-borges.webp",
+              'luis-borges.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/luis-borges.webp',
               },
-              "luffy.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/luffy.webp",
+              'luffy.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/luffy.webp',
               },
-              "imac-g4.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/imac-g4.webp",
+              'imac-g4.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/imac-g4.webp',
               },
-              "hideo-kojima.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/hideo-kojima.webp",
+              'hideo-kojima.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/hideo-kojima.webp',
               },
-              "brian-chesky.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/brian-chesky.webp",
+              'brian-chesky.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/brian-chesky.webp',
               },
-              "pg-tweet.png": {
-                type: "file",
-                content: "image",
-                imageUrl: "/terminal/pg-tweet.webp",
+              'pg-tweet.png': {
+                type: 'file',
+                content: 'image',
+                imageUrl: '/terminal/pg-tweet.webp',
               },
             },
           },
           videos: {
-            type: "directory",
+            type: 'directory',
             children: {
-              "steve-jobs-secrets-of-life.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZ7GfyPRzcHDANJhRsnGvB1b9p5PVXWL3TUlt0",
+              'steve-jobs-secrets-of-life.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZ7GfyPRzcHDANJhRsnGvB1b9p5PVXWL3TUlt0',
               },
-              "zelda-ocarina-of-time-intro.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZhSyiREAWFDYmUGP2vMQNKJsju4aSynkobIz9",
+              'zelda-ocarina-of-time-intro.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZhSyiREAWFDYmUGP2vMQNKJsju4aSynkobIz9',
               },
-              "joe-hisashi-howls-moving-castle.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZDak5lbYPmGib4rYejokJdTSIsFXWRzH7wNf0",
+              'joe-hisashi-howls-moving-castle.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZDak5lbYPmGib4rYejokJdTSIsFXWRzH7wNf0',
               },
-              "sam-altman-advice.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZDgoTW0YPmGib4rYejokJdTSIsFXWRzH7wNf0",
+              'sam-altman-advice.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZDgoTW0YPmGib4rYejokJdTSIsFXWRzH7wNf0',
               },
-              "super-mario-galaxy.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZUCxM61cO3VMy8g7pD69zhb2tSC5RTincqofd",
+              'super-mario-galaxy.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZUCxM61cO3VMy8g7pD69zhb2tSC5RTincqofd',
               },
-              "mark-zuckerberg-interview.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZhb0e7rAWFDYmUGP2vMQNKJsju4aSynkobIz9",
+              'mark-zuckerberg-interview.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZhb0e7rAWFDYmUGP2vMQNKJsju4aSynkobIz9',
               },
-              "people-dreams-one-piece.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZYckfT13GJnqZOrjlzNTHV51DmwoPxhvcgF2A",
+              'people-dreams-one-piece.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZYckfT13GJnqZOrjlzNTHV51DmwoPxhvcgF2A',
               },
-              "zelda-twilight-princess-intro.mp4": {
-                type: "file",
-                content: "video",
-                videoUrl: "https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZvnPBO5bFSk9hwmnyr1D5jsIizPatduM6qWfK",
+              'zelda-twilight-princess-intro.mp4': {
+                type: 'file',
+                content: 'video',
+                videoUrl:
+                  'https://i4jauuo5gk.ufs.sh/f/bg1v3x3oGVlZvnPBO5bFSk9hwmnyr1D5jsIizPatduM6qWfK',
               },
             },
           },
         },
       },
       notes: {
-        type: "directory",
+        type: 'directory',
         children: {
-          "best-marketing.txt": {
-            type: "file",
-            content: "the best marketing is at the core of a product's exponential growth, and it's the organic word of mouth from users. if the product is truly good, it'll naturally get shared around",
+          'best-marketing.txt': {
+            type: 'file',
+            content:
+              "the best marketing is at the core of a product's exponential growth, and it's the organic word of mouth from users. if the product is truly good, it'll naturally get shared around",
           },
-          "gsaas.txt": {
-            type: "file",
-            content: "generative software as a service is the new saas. it goes beyond being just an ai lab offering a model—it's about delivering software that creates value for the user and selling it as a subscription",
+          'gsaas.txt': {
+            type: 'file',
+            content:
+              "generative software as a service is the new saas. it goes beyond being just an ai lab offering a model—it's about delivering software that creates value for the user and selling it as a subscription",
           },
         },
       },
       ascii: {
-        type: "directory",
+        type: 'directory',
         children: {
-          "vercel.txt": {
-            type: "file",
+          'vercel.txt': {
+            type: 'file',
             content: `
                   @
                  @@@
@@ -220,8 +235,8 @@ export const fileSystem: FileSystemNode = {
   @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@                              
       `,
           },
-          "heart.txt": {
-            type: "file",
+          'heart.txt': {
+            type: 'file',
             content: `
     ♥♥♥♥♥♥♥     ♥♥♥♥♥♥♥
   ♥♥♥♥♥♥♥♥♥   ♥♥♥♥♥♥♥♥♥
@@ -242,8 +257,8 @@ export const fileSystem: FileSystemNode = {
             ♥
       `,
           },
-          "cat.txt": {
-            type: "file",
+          'cat.txt': {
+            type: 'file',
             content: `
     /\\_/\\  
    (  o.o  ) 
@@ -254,8 +269,8 @@ export const fileSystem: FileSystemNode = {
  ╰─────────╯
       `,
           },
-          "rocket.txt": {
-            type: "file",
+          'rocket.txt': {
+            type: 'file',
             content: `
            /\\
           /  \\
@@ -276,8 +291,8 @@ export const fileSystem: FileSystemNode = {
         🔥🔥🔥🔥
       `,
           },
-          "yc.txt": {
-            type: "file",
+          'yc.txt': {
+            type: 'file',
             content: `
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
@@ -302,10 +317,11 @@ export const fileSystem: FileSystemNode = {
           },
         },
       },
-      "README.txt": {
-        type: "file",
-        content: "welcome to astnai terminal!\n\nthis terminal is read-only, made just for exploring the file system. shoot me a dm at @astnai (twitter) if you have feedback or suggestions.\n\nbuilt with cursor and inspired by @ryolu_ os",
+      'README.txt': {
+        type: 'file',
+        content:
+          'welcome to astnai terminal!\n\nthis terminal is read-only, made just for exploring the file system. shoot me a dm at @astnai (twitter) if you have feedback or suggestions.\n\nbuilt with cursor and inspired by @ryolu_ os',
       },
     },
   },
-}; 
+};

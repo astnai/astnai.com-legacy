@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import * as motion from "motion/react-client";
-import { Polaroid } from "@/lib/types/polaroid";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { PolaroidImage } from "./PolaroidImage";
+import * as motion from 'motion/react-client';
+import { Polaroid } from '@/lib/types/polaroid';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { PolaroidImage } from './PolaroidImage';
 
 interface PolaroidCardProps {
   polaroid: Polaroid;
@@ -21,17 +21,17 @@ export const PolaroidCard = ({ polaroid, index }: PolaroidCardProps) => {
       dragElastic={0.1}
       initial={{ rotate: initialRotation }}
       whileTap={
-        !isMobile ? { rotate: 0, scale: 1.06, cursor: "grabbing" } : undefined
+        !isMobile ? { rotate: 0, scale: 1.06, cursor: 'grabbing' } : undefined
       }
       animate={{ rotate: initialRotation }}
-      className="relative w-full aspect-[4/4] bg-[#fafafa] p-2 rounded-sm shadow-sm ring ring-neutral-800/10 dark:shadow-none select-none"
+      className='relative w-full aspect-[4/4] bg-[#fafafa] p-2 rounded-sm shadow-sm ring ring-neutral-800/10 dark:shadow-none select-none'
       style={{
-        touchAction: isMobile ? "auto" : "none",
-        cursor: isMobile ? "default" : "grab",
+        touchAction: isMobile ? 'auto' : 'none',
+        cursor: isMobile ? 'default' : 'grab',
       }}
     >
       <PolaroidImage src={polaroid.src} alt={polaroid.alt} index={index} />
-      <p className="font-medium mt-1 py-2 text-center text-neutral-800 font-handwriting text-2xl">
+      <p className='font-medium mt-1 py-2 text-center text-neutral-800 font-handwriting text-2xl'>
         {polaroid.caption}
       </p>
     </motion.div>

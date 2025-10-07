@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from 'next/image';
 
 interface PolaroidImageProps {
   src: string;
@@ -7,13 +7,13 @@ interface PolaroidImageProps {
 }
 
 export const PolaroidImage = ({ src, alt, index }: PolaroidImageProps) => (
-  <div className="relative w-full h-full bg-[#fafafa]">
+  <div className='relative w-full h-full bg-[#fafafa]'>
     <Image
       src={src}
       alt={alt}
       fill
-      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-      className="object-cover"
+      sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+      className='object-cover'
       draggable={false}
       priority={index < 6}
     />

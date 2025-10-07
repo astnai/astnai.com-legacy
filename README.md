@@ -1,6 +1,7 @@
 # astnai.com
 
-A personal and experimental website by Agustin Arias (astnai) to showcase projects, resources, and interests.
+A personal and experimental website by Agustin Arias (astnai) to showcase
+projects, resources, and interests.
 
 - Next.js (App Router)
 - TailwindCSS

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState, useRef, useEffect } from "react";
-import { fileSystem, type File, type Directory } from "./fileSystem";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { useRouter } from "next/navigation";
+import React, { useState, useRef, useEffect } from 'react';
+import { fileSystem, type File, type Directory } from './fileSystem';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useRouter } from 'next/navigation';
 
 // ===== Types =====
 type HistoryItem = {
@@ -14,88 +14,88 @@ type HistoryItem = {
 
 // ===== Constants =====
 const AVAILABLE_COMMANDS = [
-  "ls",
-  "cd",
-  "pwd",
-  "cat",
-  "viu",
-  "play",
-  "rename",
-  "clear",
-  "echo",
-  "date",
-  "whoami",
-  "cowsay",
-  "copy",
-  "help",
-  "open",
-  "tree",
+  'ls',
+  'cd',
+  'pwd',
+  'cat',
+  'viu',
+  'play',
+  'rename',
+  'clear',
+  'echo',
+  'date',
+  'whoami',
+  'cowsay',
+  'copy',
+  'help',
+  'open',
+  'tree',
 ];
 const MAX_HISTORY_ITEMS = 300;
-const DAY_ABBREVIATIONS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const DAY_ABBREVIATIONS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 const MONTH_ABBREVIATIONS = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 const OPENABLE_PAGES_LIST = [
-  "polaroids",
-  "/polaroids",
-  "projects",
-  "/projects",
-  "books",
-  "/books",
-  "talks",
-  "/talks",
-  "links",
-  "/links",
-  "terminal",
-  "/terminal",
+  'polaroids',
+  '/polaroids',
+  'projects',
+  '/projects',
+  'books',
+  '/books',
+  'talks',
+  '/talks',
+  'links',
+  '/links',
+  'terminal',
+  '/terminal',
 ];
 const OPENABLE_PAGES: { [key: string]: string } = {
-  polaroids: "/polaroids",
-  "/polaroids": "/polaroids",
-  projects: "/projects",
-  "/projects": "/projects",
-  books: "/books",
-  "/books": "/books",
-  talks: "/talks",
-  "/talks": "/talks",
-  links: "/links",
-  "/links": "/links",
-  terminal: "/terminal",
-  "/terminal": "/terminal",
+  polaroids: '/polaroids',
+  '/polaroids': '/polaroids',
+  projects: '/projects',
+  '/projects': '/projects',
+  books: '/books',
+  '/books': '/books',
+  talks: '/talks',
+  '/talks': '/talks',
+  links: '/links',
+  '/links': '/links',
+  terminal: '/terminal',
+  '/terminal': '/terminal',
 };
 
 // ===== Utility Functions =====
 const getSortedItems = (dir: Directory) => {
   return Object.entries(dir.children)
     .map(([name, item]) => ({
-      name: item.type === "directory" ? `${name}/` : name,
+      name: item.type === 'directory' ? `${name}/` : name,
       type: item.type,
       sortKey: name,
     }))
     .sort((a, b) => {
-      if (a.type !== b.type) return a.type === "directory" ? -1 : 1;
-      const aName = a.sortKey.split(".")[0];
-      const bName = b.sortKey.split(".")[0];
+      if (a.type !== b.type) return a.type === 'directory' ? -1 : 1;
+      const aName = a.sortKey.split('.')[0];
+      const bName = b.sortKey.split('.')[0];
       const nameCompare = aName.localeCompare(bName, undefined, {
-        sensitivity: "case",
-        caseFirst: "lower",
+        sensitivity: 'case',
+        caseFirst: 'lower',
       });
       if (nameCompare !== 0) return nameCompare;
       return a.sortKey.localeCompare(b.sortKey, undefined, {
-        sensitivity: "case",
-        caseFirst: "lower",
+        sensitivity: 'case',
+        caseFirst: 'lower',
       });
     })
     .map((item) => item.name);
@@ -105,29 +105,29 @@ const getSortedItems = (dir: Directory) => {
 const renderTree = (
   node: Directory | File,
   name: string,
-  prefix = "",
-  isLast = true
+  prefix = '',
+  isLast = true,
 ): React.ReactNode => {
-  if (node.type === "file") {
+  if (node.type === 'file') {
     return (
-      <div key={prefix + name} className="whitespace-pre">
-        {prefix + (isLast ? "└── " : "├── ") + name}
+      <div key={prefix + name} className='whitespace-pre'>
+        {prefix + (isLast ? '└── ' : '├── ') + name}
       </div>
     );
   }
   const entries = Object.entries((node as Directory).children);
   return (
-    <div key={prefix + name} className="whitespace-pre">
+    <div key={prefix + name} className='whitespace-pre'>
       {prefix +
-        (name ? (isLast ? "└── " : "├── ") : "") +
-        (name ? name + "/" : "")}
+        (name ? (isLast ? '└── ' : '├── ') : '') +
+        (name ? name + '/' : '')}
       {entries.map(([childName, childNode], idx) =>
         renderTree(
           childNode,
           childName,
-          prefix + (name ? (isLast ? "    " : "│   ") : ""),
-          idx === entries.length - 1
-        )
+          prefix + (name ? (isLast ? '    ' : '│   ') : ''),
+          idx === entries.length - 1,
+        ),
       )}
     </div>
   );
@@ -136,18 +136,18 @@ const renderTree = (
 // ===== Component =====
 export default function Terminal() {
   // ===== State =====
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState('');
   const [history, setHistory] = useState<HistoryItem[]>([
-    { command: "", output: `░█▀█░█▀█\n░█▀█░█▀█\n░▀░▀░▀░▀`, prompt: "" },
-    { command: "", output: "Welcome to astnai terminal", prompt: "" },
+    { command: '', output: `░█▀█░█▀█\n░█▀█░█▀█\n░▀░▀░▀░▀`, prompt: '' },
+    { command: '', output: 'Welcome to astnai terminal', prompt: '' },
     {
-      command: "",
+      command: '',
       output: "Type 'help' to see available commands",
-      prompt: "",
+      prompt: '',
     },
   ]);
-  const [currentPath, setCurrentPath] = useState("/");
-  const [username, setUsername] = useState("user@computer");
+  const [currentPath, setCurrentPath] = useState('/');
+  const [username, setUsername] = useState('user@computer');
   const [commandHistory, setCommandHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -166,11 +166,11 @@ export default function Terminal() {
 
   // ===== File System Utilities =====
   const getCurrentDirectory = () => {
-    const pathParts = currentPath.split("/").filter(Boolean);
-    let current = fileSystem["/"] as Directory;
+    const pathParts = currentPath.split('/').filter(Boolean);
+    let current = fileSystem['/'] as Directory;
     for (const part of pathParts) {
       if (
-        current.type === "directory" &&
+        current.type === 'directory' &&
         current.children &&
         current.children[part]
       ) {
@@ -183,12 +183,12 @@ export default function Terminal() {
   };
 
   const getFileAtPath = (path: string) => {
-    if (path.startsWith("/")) {
-      const pathParts = path.split("/").filter(Boolean);
-      let current = fileSystem["/"] as Directory;
+    if (path.startsWith('/')) {
+      const pathParts = path.split('/').filter(Boolean);
+      let current = fileSystem['/'] as Directory;
       for (const part of pathParts) {
         if (
-          current.type === "directory" &&
+          current.type === 'directory' &&
           current.children &&
           current.children[part]
         ) {
@@ -202,7 +202,7 @@ export default function Terminal() {
     const currentDir = getCurrentDirectory();
     if (
       !currentDir ||
-      currentDir.type !== "directory" ||
+      currentDir.type !== 'directory' ||
       !currentDir.children
     ) {
       return null;
@@ -219,15 +219,15 @@ export default function Terminal() {
         : next;
     });
   };
-  const getDisplayPath = () => (currentPath === "/" ? "/" : currentPath);
+  const getDisplayPath = () => (currentPath === '/' ? '/' : currentPath);
   const getCurrentPrompt = () => `${username}:${getDisplayPath()}$`;
   const formatMinutesSeconds = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
-      .padStart(2, "0");
+      .padStart(2, '0');
     const s = Math.floor(seconds % 60)
       .toString()
-      .padStart(2, "0");
+      .padStart(2, '0');
     return `${m}:${s}`;
   };
 
@@ -235,24 +235,24 @@ export default function Terminal() {
     if (!isVideoMode) return;
     const upperKey = key.toUpperCase();
     switch (upperKey) {
-      case "L":
+      case 'L':
         if (videoRef.current) {
           videoRef.current.volume = Math.min(1, videoRef.current.volume + 0.1);
         }
         break;
-      case "K":
+      case 'K':
         if (videoRef.current) {
           videoRef.current.volume = Math.max(0, videoRef.current.volume - 0.1);
         }
         break;
-      case "P":
+      case 'P':
         if (videoRef.current && !isHandlingVideoControl) {
           setIsHandlingVideoControl(true);
           videoRef.current.focus();
           if (videoRef.current.paused) {
             setTimeout(() => {
               videoRef.current?.play().catch((error) => {
-                console.error("Error playing video:", error);
+                console.error('Error playing video:', error);
               });
               setIsHandlingVideoControl(false);
             }, 0);
@@ -264,12 +264,12 @@ export default function Terminal() {
           }
         }
         break;
-      case "Q":
+      case 'Q':
         if (videoRef.current) {
           videoRef.current.pause();
           videoRef.current.currentTime = 0;
           setIsVideoMode(false);
-          setInput("");
+          setInput('');
           setHistory((prev) => prev.slice(0, -1));
           setVideoCurrentTime(0);
           setVideoDuration(0);
@@ -283,7 +283,7 @@ export default function Terminal() {
     if (audioRef.current && !isMobile) {
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch((error) => {
-        console.error("Error playing sound:", error);
+        console.error('Error playing sound:', error);
       });
     }
   };
@@ -291,33 +291,33 @@ export default function Terminal() {
   // ===== Tab Completion =====
   const getAvailableItems = () => {
     const currentDir = getCurrentDirectory();
-    if (currentDir && currentDir.type === "directory" && currentDir.children) {
+    if (currentDir && currentDir.type === 'directory' && currentDir.children) {
       return Object.keys(currentDir.children).sort((a, b) =>
-        a.localeCompare(b)
+        a.localeCompare(b),
       );
     }
     return [];
   };
 
   const handleTabCompletion = () => {
-    const parts = input.trim().split(" ");
+    const parts = input.trim().split(' ');
     const command = parts[0].toLowerCase();
-    const lastArg = parts[parts.length - 1] || "";
+    const lastArg = parts[parts.length - 1] || '';
 
     // --- NUEVO: Sugerencias especiales para play/viu en videos/photos ---
     const isPlayInVideos =
-      command === "play" && currentPath === "/media/videos";
-    const isViuInPhotos = command === "viu" && currentPath === "/media/photos";
+      command === 'play' && currentPath === '/media/videos';
+    const isViuInPhotos = command === 'viu' && currentPath === '/media/photos';
     if (
       (isPlayInVideos || isViuInPhotos) &&
-      (parts.length === 1 || (parts.length === 2 && lastArg === ""))
+      (parts.length === 1 || (parts.length === 2 && lastArg === ''))
     ) {
       // Mostrar todos los archivos disponibles como ls (en grid)
       const availableItems = getAvailableItems();
       addHistory({
         command: input,
         output: (
-          <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
+          <div className='grid grid-cols-2 gap-x-8 gap-y-2 mt-2'>
             {availableItems.map((name) => (
               <div key={name}>{name}</div>
             ))}
@@ -330,22 +330,22 @@ export default function Terminal() {
     if (
       (isPlayInVideos || isViuInPhotos) &&
       parts.length === 2 &&
-      lastArg !== ""
+      lastArg !== ''
     ) {
       // Filtrar archivos disponibles como ls (en grid)
       const availableItems = getAvailableItems();
       const matches = availableItems.filter((item) =>
-        item.toLowerCase().startsWith(lastArg.toLowerCase())
+        item.toLowerCase().startsWith(lastArg.toLowerCase()),
       );
       if (matches.length === 1) {
         const newParts = [...parts];
         newParts[newParts.length - 1] = matches[0];
-        setInput(newParts.join(" "));
+        setInput(newParts.join(' '));
       } else if (matches.length > 1) {
         addHistory({
           command: input,
           output: (
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
+            <div className='grid grid-cols-2 gap-x-8 gap-y-2 mt-2'>
               {matches.map((name) => (
                 <div key={name}>{name}</div>
               ))}
@@ -354,7 +354,7 @@ export default function Terminal() {
           prompt: getCurrentPrompt(),
         });
         const commonPrefix = matches.reduce((prefix, match) => {
-          let common = "";
+          let common = '';
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
             if (prefix[i].toLowerCase() === match[i].toLowerCase()) {
               common += match[i];
@@ -367,35 +367,35 @@ export default function Terminal() {
         if (commonPrefix.length > lastArg.length) {
           const newParts = [...parts];
           newParts[newParts.length - 1] = commonPrefix;
-          setInput(newParts.join(" "));
+          setInput(newParts.join(' '));
         }
       }
       return;
     }
 
-    if (input.trim() === "") {
+    if (input.trim() === '') {
       addHistory({
         command: input,
-        output: <div className=" ">{AVAILABLE_COMMANDS.join("  ")}</div>,
+        output: <div className=' '>{AVAILABLE_COMMANDS.join('  ')}</div>,
         prompt: getCurrentPrompt(),
       });
       return;
     }
     if (parts.length === 1) {
       const matches = AVAILABLE_COMMANDS.filter((cmd) =>
-        cmd.startsWith(command)
+        cmd.startsWith(command),
       );
       if (matches.length === 1) {
-        setInput(matches[0] + " ");
+        setInput(matches[0] + ' ');
         return;
       } else if (matches.length > 1) {
         addHistory({
           command: input,
-          output: <div className=" ">{matches.join("  ")}</div>,
+          output: <div className=' '>{matches.join('  ')}</div>,
           prompt: getCurrentPrompt(),
         });
         const commonPrefix = matches.reduce((prefix, match) => {
-          let common = "";
+          let common = '';
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
             if (prefix[i].toLowerCase() === match[i].toLowerCase()) {
               common += match[i];
@@ -411,20 +411,20 @@ export default function Terminal() {
         return;
       }
     }
-    if (command === "open") {
+    if (command === 'open') {
       const matches = OPENABLE_PAGES_LIST.filter((page) =>
-        page.toLowerCase().startsWith(lastArg.toLowerCase())
+        page.toLowerCase().startsWith(lastArg.toLowerCase()),
       );
       if (matches.length === 1) {
         setInput(`open ${matches[0]}`);
       } else if (matches.length > 1) {
         addHistory({
           command: input,
-          output: <div className=" ">{matches.join("  ")}</div>,
+          output: <div className=' '>{matches.join('  ')}</div>,
           prompt: getCurrentPrompt(),
         });
         const commonPrefix = matches.reduce((prefix, match) => {
-          let common = "";
+          let common = '';
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
             if (prefix[i].toLowerCase() === match[i].toLowerCase()) {
               common += match[i];
@@ -440,38 +440,38 @@ export default function Terminal() {
       }
       return;
     }
-    if (["cd", "cat", "viu", "play", "copy"].includes(command)) {
+    if (['cd', 'cat', 'viu', 'play', 'copy'].includes(command)) {
       const currentDir = getCurrentDirectory();
       if (
         currentDir &&
-        currentDir.type === "directory" &&
+        currentDir.type === 'directory' &&
         currentDir.children
       ) {
         let items: string[] = [];
-        if (command === "cd") {
+        if (command === 'cd') {
           items = Object.entries(currentDir.children)
-            .filter(([, item]) => item.type === "directory")
+            .filter(([, item]) => item.type === 'directory')
             .map(([name]) => `${name}/`)
             .sort((a, b) => a.localeCompare(b));
-          items.unshift("../");
+          items.unshift('../');
         } else {
           items = getSortedItems(currentDir);
         }
         const matches = items.filter((item) =>
-          item.toLowerCase().startsWith(lastArg.toLowerCase())
+          item.toLowerCase().startsWith(lastArg.toLowerCase()),
         );
         if (matches.length === 1) {
           const newParts = [...parts];
           newParts[newParts.length - 1] = matches[0];
-          setInput(newParts.join(" "));
+          setInput(newParts.join(' '));
         } else if (matches.length > 1) {
           addHistory({
             command: input,
-            output: <div className=" ">{matches.join("  ")}</div>,
+            output: <div className=' '>{matches.join('  ')}</div>,
             prompt: getCurrentPrompt(),
           });
           const commonPrefix = matches.reduce((prefix, match) => {
-            let common = "";
+            let common = '';
             for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
               if (prefix[i].toLowerCase() === match[i].toLowerCase()) {
                 common += match[i];
@@ -484,29 +484,29 @@ export default function Terminal() {
           if (commonPrefix.length > lastArg.length) {
             const newParts = [...parts];
             newParts[newParts.length - 1] = commonPrefix;
-            setInput(newParts.join(" "));
+            setInput(newParts.join(' '));
           }
         }
         return;
       }
     }
-    if (command === "ls") {
+    if (command === 'ls') {
       const availableItems = getAvailableItems();
       const matches = availableItems.filter((item) =>
-        item.toLowerCase().startsWith(lastArg.toLowerCase())
+        item.toLowerCase().startsWith(lastArg.toLowerCase()),
       );
       if (matches.length === 1) {
         const newParts = [...parts];
         newParts[newParts.length - 1] = matches[0];
-        setInput(newParts.join(" "));
+        setInput(newParts.join(' '));
       } else if (matches.length > 1) {
         addHistory({
           command: input,
-          output: <div className=" ">{matches.join("  ")}</div>,
+          output: <div className=' '>{matches.join('  ')}</div>,
           prompt: getCurrentPrompt(),
         });
         const commonPrefix = matches.reduce((prefix, match) => {
-          let common = "";
+          let common = '';
           for (let i = 0; i < Math.min(prefix.length, match.length); i++) {
             if (prefix[i].toLowerCase() === match[i].toLowerCase()) {
               common += match[i];
@@ -519,7 +519,7 @@ export default function Terminal() {
         if (commonPrefix.length > lastArg.length) {
           const newParts = [...parts];
           newParts[newParts.length - 1] = commonPrefix;
-          setInput(newParts.join(" "));
+          setInput(newParts.join(' '));
         }
       }
       return;
@@ -528,8 +528,8 @@ export default function Terminal() {
 
   // ===== Command Execution =====
   const executeCommand = (cmd: string) => {
-    let output: string | React.JSX.Element = "";
-    const parts = cmd.trim().split(" ");
+    let output: string | React.JSX.Element = '';
+    const parts = cmd.trim().split(' ');
     const command = parts[0].toLowerCase();
     const args = parts.slice(1);
     const currentPrompt = getCurrentPrompt();
@@ -540,7 +540,7 @@ export default function Terminal() {
     }
 
     // Command handling
-    if (command === "help") {
+    if (command === 'help') {
       if (args.length === 0) {
         output = `Available commands:
 
@@ -565,70 +565,70 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
       } else {
         const helpCommand = args[0].toLowerCase();
         switch (helpCommand) {
-          case "ls":
+          case 'ls':
             output =
               "ls - List directory contents\nShows files and directories in the current location. Directories are marked with '/'.";
             break;
-          case "cd":
+          case 'cd':
             output =
-              "cd - Change directory\n\nUsage:\n  cd <directory>   Move to specified directory\n  cd ..            Go back one directory\n  cd               Return to root directory";
+              'cd - Change directory\n\nUsage:\n  cd <directory>   Move to specified directory\n  cd ..            Go back one directory\n  cd               Return to root directory';
             break;
-          case "pwd":
+          case 'pwd':
             output =
-              "pwd - Print working directory\nDisplays the full path of your current location in the file system.";
+              'pwd - Print working directory\nDisplays the full path of your current location in the file system.';
             break;
-          case "cat":
+          case 'cat':
             output =
               "cat - Display file contents\nUsage: cat [filename]\nShows the contents of text files. Use 'viu' for image files.";
             break;
-          case "viu":
+          case 'viu':
             output =
-              "viu - View image files\nUsage: viu [image-file]\nDisplays the actual image directly in the terminal.";
+              'viu - View image files\nUsage: viu [image-file]\nDisplays the actual image directly in the terminal.';
             break;
-          case "play":
+          case 'play':
             output =
-              "play - Play video files\nUsage: play [video-file]\nPlays MP4 videos with keyboard controls: Q (quit), K (volume down), L (volume up), P (pause/play).";
+              'play - Play video files\nUsage: play [video-file]\nPlays MP4 videos with keyboard controls: Q (quit), K (volume down), L (volume up), P (pause/play).';
             break;
-          case "rename":
+          case 'rename':
             output =
-              "rename - Change username\nUsage: rename [new-username]\nChanges your username displayed in the terminal prompt.";
+              'rename - Change username\nUsage: rename [new-username]\nChanges your username displayed in the terminal prompt.';
             break;
-          case "clear":
+          case 'clear':
             output =
-              "clear - Clear terminal screen\nRemoves all previous commands and output from the terminal display.";
+              'clear - Clear terminal screen\nRemoves all previous commands and output from the terminal display.';
             break;
-          case "echo":
+          case 'echo':
             output =
-              "echo - Display text\nUsage: echo [text]\nPrints the specified text to the terminal.";
+              'echo - Display text\nUsage: echo [text]\nPrints the specified text to the terminal.';
             break;
-          case "date":
+          case 'date':
             output =
-              "date - Show current date and time\nDisplays the current system date and time.";
+              'date - Show current date and time\nDisplays the current system date and time.';
             break;
-          case "whoami":
+          case 'whoami':
             output =
-              "whoami - Display current username\nShows the current username (without the @invite part).";
+              'whoami - Display current username\nShows the current username (without the @invite part).';
             break;
-          case "cowsay":
+          case 'cowsay':
             output =
-              "cowsay - Make a cow say something\nUsage: cowsay [message]\nDisplays an ASCII art cow with a speech bubble containing your message.";
+              'cowsay - Make a cow say something\nUsage: cowsay [message]\nDisplays an ASCII art cow with a speech bubble containing your message.';
             break;
-          case "copy":
+          case 'copy':
             output =
-              "copy - Copy text file to clipboard\n\nUsage: copy filename.txt\n\nCopies the contents of a text file to your clipboard.\nOnly works with .txt files.";
+              'copy - Copy text file to clipboard\n\nUsage: copy filename.txt\n\nCopies the contents of a text file to your clipboard.\nOnly works with .txt files.';
             break;
-          case "help":
+          case 'help':
             output =
-              "help - Show help information\nUsage: help | help [command]\n- help: Show all available commands\n- help [command]: Show detailed help for a specific command";
+              'help - Show help information\nUsage: help | help [command]\n- help: Show all available commands\n- help [command]: Show detailed help for a specific command';
             break;
-          case "open":
+          case 'open':
             output =
-              "Usage: open <page>. Available pages: polaroids, projects, books, talks, links, terminal";
+              'Usage: open <page>. Available pages: polaroids, projects, books, talks, links, terminal';
             break;
-          case "tree":
+          case 'tree':
             output = (
-              <div className="font-mono text-xs whitespace-pre-wrap mt-2">
-                {renderTree(fileSystem["/"] as Directory, "", "", true)}
+              <div className='font-mono text-xs whitespace-pre-wrap mt-2'>
+                {renderTree(fileSystem['/'] as Directory, '', '', true)}
               </div>
             );
             break;
@@ -636,28 +636,28 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
             output = `help: no help available for '${helpCommand}'\nType 'help' to see all available commands.`;
         }
       }
-    } else if (command === "clear") {
+    } else if (command === 'clear') {
       playOutputSound();
       setHistory([]);
-      setInput("");
+      setInput('');
       return;
-    } else if (command === "rename") {
+    } else if (command === 'rename') {
       if (args.length === 0) {
-        output = "rename: missing username";
+        output = 'rename: missing username';
       } else if (args[0].length > 20) {
-        output = "rename: username must be 20 characters or less";
+        output = 'rename: username must be 20 characters or less';
       } else if (/\s/.test(args[0])) {
-        output = "rename: username cannot contain spaces";
+        output = 'rename: username cannot contain spaces';
       } else {
         const newUsername = args[0];
         setUsername(newUsername);
-        localStorage.setItem("terminal_username", newUsername);
+        localStorage.setItem('terminal_username', newUsername);
         output = `Username changed to: ${newUsername}`;
       }
-    } else if (command.startsWith("echo")) {
+    } else if (command.startsWith('echo')) {
       const args = cmd.substring(5).trim();
       if (!args) {
-        output = "";
+        output = '';
         return;
       }
 
@@ -670,20 +670,20 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
       }
 
       processedOutput = processedOutput
-        .replace(/\\n/g, "\n")
-        .replace(/\\t/g, "\t")
+        .replace(/\\n/g, '\n')
+        .replace(/\\t/g, '\t')
         .replace(/\\"/g, '"')
         .replace(/\\'/g, "'")
-        .replace(/\\\\/g, "\\")
+        .replace(/\\\\/g, '\\')
         .replace(/\$(\w+)/g, (match, variable) => {
           switch (variable) {
-            case "USER":
-              return username.split("@")[0];
-            case "PATH":
+            case 'USER':
+              return username.split('@')[0];
+            case 'PATH':
               return currentPath;
-            case "HOME":
-              return "/";
-            case "PWD":
+            case 'HOME':
+              return '/';
+            case 'PWD':
               return currentPath;
             default:
               return match;
@@ -691,103 +691,103 @@ Tip: Use TAB to autocomplete commands, files and directories.`;
         });
 
       output = processedOutput;
-    } else if (command === "date") {
+    } else if (command === 'date') {
       const now = new Date();
       const day = DAY_ABBREVIATIONS[now.getDay()];
       const month = MONTH_ABBREVIATIONS[now.getMonth()];
-      const date = now.getDate().toString().padStart(2, "0");
-      const hours = now.getHours().toString().padStart(2, "0");
-      const minutes = now.getMinutes().toString().padStart(2, "0");
-      const seconds = now.getSeconds().toString().padStart(2, "0");
+      const date = now.getDate().toString().padStart(2, '0');
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
       const year = now.getFullYear();
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
       output = `${day} ${month} ${date} ${hours}:${minutes}:${seconds} ${timezone} ${year}`;
-    } else if (command === "whoami") {
-      const [user, host] = username.split("@");
+    } else if (command === 'whoami') {
+      const [user, host] = username.split('@');
       const now = new Date();
       const hours = now.getHours();
       const timeOfDay =
-        hours < 12 ? "morning" : hours < 18 ? "afternoon" : "evening";
+        hours < 12 ? 'morning' : hours < 18 ? 'afternoon' : 'evening';
 
       output = `User: ${user}
-Host: ${host || "localhost"}
+Host: ${host || 'localhost'}
 Login: ${username}
 Time: ${timeOfDay}
 Path: ${currentPath}`;
-    } else if (command === "pwd") {
+    } else if (command === 'pwd') {
       output = currentPath;
-    } else if (command === "ls") {
+    } else if (command === 'ls') {
       const currentDir = getCurrentDirectory();
       if (
         currentDir &&
-        currentDir.type === "directory" &&
+        currentDir.type === 'directory' &&
         currentDir.children
       ) {
         const items = getSortedItems(currentDir);
-        const isMediaPhotos = currentPath === "/media/photos";
-        const isMediaVideos = currentPath === "/media/videos";
+        const isMediaPhotos = currentPath === '/media/photos';
+        const isMediaVideos = currentPath === '/media/videos';
 
         if (isMediaPhotos || isMediaVideos) {
           const gridItems = items.map((name) => (
-            <div key={name} className=" ">
+            <div key={name} className=' '>
               {name}
             </div>
           ));
 
           output = (
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2">
+            <div className='grid grid-cols-2 gap-x-8 gap-y-2 mt-2'>
               {gridItems}
             </div>
           );
         } else {
           output =
             items.length > 0
-              ? items.join("  ")
+              ? items.join('  ')
               : "Directory is empty. Use 'cd' to navigate to another directory.";
         }
       } else {
-        output = "Cannot list directory";
+        output = 'Cannot list directory';
       }
-    } else if (command === "cd") {
+    } else if (command === 'cd') {
       if (args.length === 0) {
-        setCurrentPath("/");
-        output = "";
-      } else if (args[0] === "..") {
-        const pathParts = currentPath.split("/").filter(Boolean);
+        setCurrentPath('/');
+        output = '';
+      } else if (args[0] === '..') {
+        const pathParts = currentPath.split('/').filter(Boolean);
         if (pathParts.length > 0) {
           pathParts.pop();
-          setCurrentPath("/" + pathParts.join("/"));
+          setCurrentPath('/' + pathParts.join('/'));
         }
-        output = "";
+        output = '';
       } else {
-        const targetPath = args[0].replace(/\/$/, "");
+        const targetPath = args[0].replace(/\/$/, '');
         const target = getFileAtPath(targetPath);
 
-        if (target && target.type === "directory") {
-          if (args[0].startsWith("/")) {
+        if (target && target.type === 'directory') {
+          if (args[0].startsWith('/')) {
             setCurrentPath(args[0]);
           } else {
             const newPath =
-              currentPath === "/"
+              currentPath === '/'
                 ? `/${targetPath}`
                 : `${currentPath}/${targetPath}`;
             setCurrentPath(newPath);
           }
-          output = "";
+          output = '';
         } else {
           output = `No such directory: ${args[0]}`;
         }
       }
-    } else if (command === "cat") {
+    } else if (command === 'cat') {
       if (args.length === 0) {
-        output = "Missing file operand";
+        output = 'Missing file operand';
       } else {
         const file = getFileAtPath(args[0]) as File;
-        if (file && file.type === "file") {
-          if (file.content === "image") {
+        if (file && file.type === 'file') {
+          if (file.content === 'image') {
             output = `Is a binary file (use 'viu' to view images)`;
-          } else if (file.content === "video") {
+          } else if (file.content === 'video') {
             output = `Is a video file (use 'play' command to view videos)`;
           } else {
             output = file.content;
@@ -796,30 +796,30 @@ Path: ${currentPath}`;
           output = `No such file: ${args[0]}`;
         }
       }
-    } else if (command === "viu") {
+    } else if (command === 'viu') {
       if (args.length === 0) {
-        output = "Missing file operand";
+        output = 'Missing file operand';
       } else {
         const file = getFileAtPath(args[0]) as File;
         if (
           file &&
-          file.type === "file" &&
-          file.content === "image" &&
+          file.type === 'file' &&
+          file.content === 'image' &&
           file.imageUrl
         ) {
           output = (
-            <div className="mt-2 mb-3">
+            <div className='mt-2 mb-3'>
               <img
                 src={file.imageUrl}
                 alt={args[0]}
-                className="max-w-full rounded-none"
-                style={{ maxHeight: "250px" }}
+                className='max-w-full rounded-none'
+                style={{ maxHeight: '250px' }}
                 onLoad={() => setImageLoaded((prev) => !prev)}
               />
             </div>
           );
-        } else if (file && file.type === "file") {
-          if (file.content === "video") {
+        } else if (file && file.type === 'file') {
+          if (file.content === 'video') {
             output = `Is a video file (use 'play' command to view videos)`;
           } else {
             output = `Not an image file (only .png, .jpg, .webp files are supported)`;
@@ -828,15 +828,15 @@ Path: ${currentPath}`;
           output = `No such file: ${args[0]}`;
         }
       }
-    } else if (command === "play") {
+    } else if (command === 'play') {
       if (args.length === 0) {
-        output = "Missing file operand";
+        output = 'Missing file operand';
       } else {
         const file = getFileAtPath(args[0]) as File;
         if (
           file &&
-          file.type === "file" &&
-          file.content === "video" &&
+          file.type === 'file' &&
+          file.content === 'video' &&
           file.videoUrl
         ) {
           // Reset states before starting new video
@@ -844,31 +844,31 @@ Path: ${currentPath}`;
           setVideoCurrentTime(0);
           setVideoDuration(0);
           output = (
-            <div className="mt-2 mb-3">
+            <div className='mt-2 mb-3'>
               <video
                 ref={videoRef}
                 src={file.videoUrl}
-                className="max-w-full rounded-none bg-black"
+                className='max-w-full rounded-none bg-black'
                 style={{
-                  maxHeight: isMobile ? "300px" : "440px",
-                  height: isMobile ? "auto" : "440px",
-                  width: "100%",
-                  objectFit: "contain",
+                  maxHeight: isMobile ? '300px' : '440px',
+                  height: isMobile ? 'auto' : '440px',
+                  width: '100%',
+                  objectFit: 'contain',
                 }}
                 controls={false}
                 autoPlay
                 playsInline
-                preload="auto"
+                preload='auto'
               />
-              <div className="mt-2 flex items-center justify-between text-xs sm:text-sm">
-                <span className="text-muted-foreground">
+              <div className='mt-2 flex items-center justify-between text-xs sm:text-sm'>
+                <span className='text-muted-foreground'>
                   Q[QUIT] K[VOLUME DOWN] L[VOLUME UP] P[PAUSE/PLAY]
                 </span>
               </div>
             </div>
           );
-        } else if (file && file.type === "file") {
-          if (file.content === "image") {
+        } else if (file && file.type === 'file') {
+          if (file.content === 'image') {
             output = `Is an image file (use 'viu' to view images)`;
           } else {
             output = `Not a video file (only .mp4 files are supported)`;
@@ -877,19 +877,19 @@ Path: ${currentPath}`;
           output = `No such file: ${args[0]}`;
         }
       }
-    } else if (command === "cowsay") {
+    } else if (command === 'cowsay') {
       if (args.length === 0) {
-        output = "What should the cow say?";
+        output = 'What should the cow say?';
       } else {
-        const message = args.join(" ");
+        const message = args.join(' ');
         const maxWidth = 40;
-        const words = message.split(" ");
+        const words = message.split(' ');
         const lines: string[] = [];
-        let currentLine = "";
+        let currentLine = '';
 
         words.forEach((word) => {
           if (currentLine.length + word.length + 1 <= maxWidth) {
-            currentLine += (currentLine ? " " : "") + word;
+            currentLine += (currentLine ? ' ' : '') + word;
           } else {
             lines.push(currentLine);
             currentLine = word;
@@ -899,13 +899,13 @@ Path: ${currentPath}`;
 
         const maxLineLength = Math.max(...lines.map((line) => line.length));
         const bubble = [
-          " " + "_".repeat(maxLineLength + 2),
+          ' ' + '_'.repeat(maxLineLength + 2),
           ...lines.map(
             (line) =>
-              "| " + line + " ".repeat(maxLineLength - line.length) + " |"
+              '| ' + line + ' '.repeat(maxLineLength - line.length) + ' |',
           ),
-          " " + "-".repeat(maxLineLength + 2),
-        ].join("\n");
+          ' ' + '-'.repeat(maxLineLength + 2),
+        ].join('\n');
 
         const cow = `
         \\   ^__^
@@ -916,15 +916,15 @@ Path: ${currentPath}`;
 
         output = bubble + cow;
       }
-    } else if (command === "copy") {
+    } else if (command === 'copy') {
       if (args.length === 0) {
-        output = "Missing file operand";
+        output = 'Missing file operand';
       } else {
         const file = getFileAtPath(args[0]) as File;
-        if (file && file.type === "file") {
-          if (file.content === "image" || file.content === "video") {
+        if (file && file.type === 'file') {
+          if (file.content === 'image' || file.content === 'video') {
             output = `copy: ${args[0]}: Is a binary file`;
-          } else if (!args[0].toLowerCase().endsWith(".txt")) {
+          } else if (!args[0].toLowerCase().endsWith('.txt')) {
             output = `copy: ${args[0]}: Only .txt files are supported`;
           } else {
             const content = file.content as string;
@@ -945,38 +945,38 @@ Path: ${currentPath}`;
           output = `copy: ${args[0]}: No such file`;
         }
       }
-    } else if (command === "open") {
+    } else if (command === 'open') {
       if (args.length === 0) {
         output =
-          "Usage: open <page>. Available pages: polaroids, projects, books, talks, links, terminal";
+          'Usage: open <page>. Available pages: polaroids, projects, books, talks, links, terminal';
       } else {
-        const pageArg = args[0].startsWith("/")
+        const pageArg = args[0].startsWith('/')
           ? args[0]
           : args[0].toLowerCase();
         const pagePath = OPENABLE_PAGES[pageArg];
         if (pagePath) {
           router.push(pagePath);
-          setInput("");
+          setInput('');
           return;
         } else {
           output = `open: '${args[0]}' is not a valid page.`;
         }
       }
-    } else if (command === "tree") {
+    } else if (command === 'tree') {
       output = (
-        <div className="font-mono text-xs whitespace-pre-wrap mt-2">
-          {renderTree(fileSystem["/"] as Directory, "", "", true)}
+        <div className='font-mono text-xs whitespace-pre-wrap mt-2'>
+          {renderTree(fileSystem['/'] as Directory, '', '', true)}
         </div>
       );
-    } else if (command === "") {
-      output = "";
+    } else if (command === '') {
+      output = '';
     } else {
       output = `Command not found: ${command}`;
     }
 
     addHistory({ command: cmd, output, prompt: currentPrompt });
     if (cmd.trim()) playOutputSound();
-    setInput("");
+    setInput('');
   };
 
   // ===== Event Handlers =====
@@ -992,10 +992,10 @@ Path: ${currentPath}`;
       return;
     }
 
-    if (e.key === "Tab") {
+    if (e.key === 'Tab') {
       e.preventDefault();
       handleTabCompletion();
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       if (commandHistory.length > 0) {
         const newIndex =
@@ -1005,7 +1005,7 @@ Path: ${currentPath}`;
         setHistoryIndex(newIndex);
         setInput(commandHistory[commandHistory.length - 1 - newIndex]);
       }
-    } else if (e.key === "ArrowDown") {
+    } else if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (historyIndex > 0) {
         const newIndex = historyIndex - 1;
@@ -1013,14 +1013,14 @@ Path: ${currentPath}`;
         setInput(commandHistory[commandHistory.length - 1 - newIndex]);
       } else if (historyIndex === 0) {
         setHistoryIndex(-1);
-        setInput("");
+        setInput('');
       }
     }
   };
 
   // ===== Effects =====
   useEffect(() => {
-    audioRef.current = new Audio("/terminal/output-sound.mp3");
+    audioRef.current = new Audio('/terminal/output-sound.mp3');
     if (audioRef.current) {
       audioRef.current.volume = 0.3;
     }
@@ -1041,13 +1041,13 @@ Path: ${currentPath}`;
     if (!isMobile) {
       inputRef.current?.focus();
     }
-    document.addEventListener("click", handleFocus);
-    document.addEventListener("focus", handleFocus);
-    window.addEventListener("focus", handleFocus);
+    document.addEventListener('click', handleFocus);
+    document.addEventListener('focus', handleFocus);
+    window.addEventListener('focus', handleFocus);
     return () => {
-      document.removeEventListener("click", handleFocus);
-      document.removeEventListener("focus", handleFocus);
-      window.removeEventListener("focus", handleFocus);
+      document.removeEventListener('click', handleFocus);
+      document.removeEventListener('focus', handleFocus);
+      window.removeEventListener('focus', handleFocus);
     };
   }, [isMobile]);
 
@@ -1055,14 +1055,14 @@ Path: ${currentPath}`;
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (isVideoMode && !isHandlingVideoControl) {
         const key = e.key.toUpperCase();
-        if (key === "Q" || key === "K" || key === "L" || key === "P") {
+        if (key === 'Q' || key === 'K' || key === 'L' || key === 'P') {
           e.preventDefault();
           handleVideoKeyControls(e.key);
         }
       }
     };
-    window.addEventListener("keydown", handleGlobalKeyDown);
-    return () => window.removeEventListener("keydown", handleGlobalKeyDown);
+    window.addEventListener('keydown', handleGlobalKeyDown);
+    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [isVideoMode, isHandlingVideoControl]);
 
   useEffect(() => {
@@ -1074,18 +1074,18 @@ Path: ${currentPath}`;
     const video = videoRef.current;
     const handleTimeUpdate = () => setVideoCurrentTime(video.currentTime || 0);
     const handleLoadedMetadata = () => setVideoDuration(video.duration || 0);
-    video.addEventListener("timeupdate", handleTimeUpdate);
-    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+    video.addEventListener('timeupdate', handleTimeUpdate);
+    video.addEventListener('loadedmetadata', handleLoadedMetadata);
     if (!isNaN(video.duration)) setVideoDuration(video.duration);
     setVideoCurrentTime(video.currentTime || 0);
     return () => {
-      video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      video.removeEventListener('timeupdate', handleTimeUpdate);
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata);
     };
   }, [isVideoMode]);
 
   useEffect(() => {
-    const savedUsername = localStorage.getItem("terminal_username");
+    const savedUsername = localStorage.getItem('terminal_username');
     if (savedUsername) {
       setUsername(savedUsername);
     }
@@ -1093,32 +1093,32 @@ Path: ${currentPath}`;
 
   // ===== Render =====
   return (
-    <div className="flex items-center justify-center leading-normal">
-      <div className="w-full">
+    <div className='flex items-center justify-center leading-normal'>
+      <div className='w-full'>
         <div
-          className="bg-card shadow-xs dark:shadow-white/10 border border-border rounded-xl h-[480px] md:h-[540px] lg:h-[600px] overflow-hidden flex flex-col text-xs sm:text-sm tracking-tight"
+          className='bg-card shadow-xs dark:shadow-white/10 border border-border rounded-xl h-[480px] md:h-[540px] lg:h-[600px] overflow-hidden flex flex-col text-xs sm:text-sm tracking-tight'
           onClick={() => !isMobile && inputRef.current?.focus()}
         >
           {/* Terminal header */}
-          <div className="h-12 px-4 border-b border-border flex items-center justify-between">
-            <div className="flex space-x-2">
-              <div className="w-3 h-3 rounded-full bg-red-500"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-              <div className="w-3 h-3 rounded-full bg-green-500"></div>
+          <div className='h-12 px-4 border-b border-border flex items-center justify-between'>
+            <div className='flex space-x-2'>
+              <div className='w-3 h-3 rounded-full bg-red-500'></div>
+              <div className='w-3 h-3 rounded-full bg-yellow-500'></div>
+              <div className='w-3 h-3 rounded-full bg-green-500'></div>
             </div>
             {isVideoMode ? (
               <>
-                <div className="text-muted-foreground absolute left-1/2 -translate-x-1/2">
+                <div className='text-muted-foreground absolute left-1/2 -translate-x-1/2'>
                   Video mode
                 </div>
-                <span className="text-xs sm:text-sm tabular-nums">
+                <span className='text-xs sm:text-sm tabular-nums'>
                   {`${formatMinutesSeconds(
-                    videoCurrentTime
+                    videoCurrentTime,
                   )} / ${formatMinutesSeconds(videoDuration)}`}
                 </span>
               </>
             ) : (
-              <div className="text-muted-foreground absolute left-1/2 -translate-x-1/2">
+              <div className='text-muted-foreground absolute left-1/2 -translate-x-1/2'>
                 Terminal
               </div>
             )}
@@ -1126,36 +1126,36 @@ Path: ${currentPath}`;
           {/* Terminal content */}
           <div
             ref={terminalRef}
-            className="flex-1 p-4 overflow-auto font-mono  "
+            className='flex-1 p-4 overflow-auto font-mono  '
           >
             {history.map((item, index) => (
-              <div key={index} className="mb-2">
-                {item.command !== "" && (
-                  <div className="flex">
-                    <span className="text-muted-foreground mr-2">
+              <div key={index} className='mb-2'>
+                {item.command !== '' && (
+                  <div className='flex'>
+                    <span className='text-muted-foreground mr-2'>
                       {item.prompt}
                     </span>
-                    <span className="">{item.command}</span>
+                    <span className=''>{item.command}</span>
                   </div>
                 )}
                 {item.output && (
-                  <div className="ml-4 whitespace-pre-wrap">{item.output}</div>
+                  <div className='ml-4 whitespace-pre-wrap'>{item.output}</div>
                 )}
               </div>
             ))}
             {/* Current input line */}
-            <form onSubmit={handleSubmit} className="flex">
-              <span className="text-muted-foreground mr-2">
+            <form onSubmit={handleSubmit} className='flex'>
+              <span className='text-muted-foreground mr-2'>
                 {getCurrentPrompt()}
               </span>
-              <div className="flex-1 relative">
+              <div className='flex-1 relative'>
                 <input
                   ref={inputRef}
-                  type="text"
+                  type='text'
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  className="w-full bg-transparent outline-none font-mono"
+                  className='w-full bg-transparent outline-none font-mono'
                   autoFocus
                 />
               </div>
@@ -1163,7 +1163,7 @@ Path: ${currentPath}`;
           </div>
         </div>
         <div>
-          <p className="text-[11px] text-muted-foreground mt-4 text-center sm:hidden">
+          <p className='text-[11px] text-muted-foreground mt-4 text-center sm:hidden'>
             Desktop version recommended for a better experience.
           </p>
         </div>
