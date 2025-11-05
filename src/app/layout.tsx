@@ -26,22 +26,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://astnai.com'),
-  description:
-    'astnai is the handle of Agustín Arias, a developer from Patagonia, Argentina.',
   title: {
     template: 'astnai/%s',
     default: 'astnai',
-  },
-  openGraph: {
-    siteName: 'astnai',
-    locale: 'en_US',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary',
-    site: '@astnai',
-    creator: '@astnai',
   },
 };
 
